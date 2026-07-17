@@ -1,0 +1,19 @@
+docs/research/codex-hook-api.md
+  s_815e7e5d7015fb::t_1338632084e409 1-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "10b5abecebc1305a73e4e144a90824e59dd94601",
+  "prompts": {},
+  "sessions": {
+    "s_815e7e5d7015fb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6863dab3-79c7-4991-9456-6cc69d828f19",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
