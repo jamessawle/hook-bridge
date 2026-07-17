@@ -1,0 +1,19 @@
+CONTEXT.md
+  s_815e7e5d7015fb::t_2a56b0c2ec8d3b 1-32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "4869719e17b59c2014c80cb901a309259e5a4438",
+  "prompts": {},
+  "sessions": {
+    "s_815e7e5d7015fb": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6863dab3-79c7-4991-9456-6cc69d828f19",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
