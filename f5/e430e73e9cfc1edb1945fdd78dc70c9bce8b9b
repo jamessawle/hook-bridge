@@ -1,0 +1,21 @@
+prototype/exec_model/driver.py
+  s_f7cd0d6bbec18b::t_061ac5fb95a835 1-4
+prototype/exec_model/pure_hook.py
+  s_f7cd0d6bbec18b::t_eb448068d28900 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "f5e430e73e9cfc1edb1945fdd78dc70c9bce8b9b",
+  "prompts": {},
+  "sessions": {
+    "s_f7cd0d6bbec18b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a9bdca59-513c-4fd7-8eab-b5c1f0da98c1",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
