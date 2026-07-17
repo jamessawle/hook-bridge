@@ -1,0 +1,19 @@
+docs/adr/0001-language-and-runtime.md
+  s_b0c180f35c2922::t_d297ce31ebe6b5 1-73
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "6e7e3b47c6cf93606ef56026c95492d3f7ca00c3",
+  "prompts": {},
+  "sessions": {
+    "s_b0c180f35c2922": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2c832ff4-f651-46d4-9c2e-bb060d89bae2",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
