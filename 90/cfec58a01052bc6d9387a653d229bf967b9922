@@ -1,0 +1,31 @@
+prototype/adapter_model/adapters/__init__.py
+  s_d0407340343134::t_3fcc2ecfcda38a 1-10
+prototype/adapter_model/adapters/claude_code.py
+  s_d0407340343134::t_fdb883e953bbc8 1-70
+prototype/adapter_model/adapters/codex.py
+  s_d0407340343134::t_9a77ef6b7ef1a3 1-68
+prototype/adapter_model/contract.py
+  s_d0407340343134::t_9878fe8aadaad9 1-79
+prototype/adapter_model/demo.py
+  s_d0407340343134::t_39f19ab5391f71 1-45
+prototype/adapter_model/git_guard.py
+  s_d0407340343134::t_8bf086e5ad3bb0 1-17
+prototype/adapter_model/runtime.py
+  s_d0407340343134::t_486ca424f14e9f 1-61
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "90cfec58a01052bc6d9387a653d229bf967b9922",
+  "prompts": {},
+  "sessions": {
+    "s_d0407340343134": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "86b53bd7-50e6-4cea-9da6-5f7a74351f69",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
