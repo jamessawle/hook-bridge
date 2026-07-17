@@ -1,0 +1,19 @@
+docs/research/claude-code-hook-api.md
+  s_1b04e034f5110e::t_e74840cdf1881a 1-110
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "1a6fe989605319bfcf45cf8b70a199fd21ee81b4",
+  "prompts": {},
+  "sessions": {
+    "s_1b04e034f5110e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "50b8d25a-f6bb-40f9-b757-63e3f523ecf3",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
