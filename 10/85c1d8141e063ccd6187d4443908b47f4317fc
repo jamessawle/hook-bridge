@@ -1,0 +1,19 @@
+prototype/variant_c_multiplicity.py
+  s_f7cd0d6bbec18b::t_9849a460a63ca4 1-98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "1085c1d8141e063ccd6187d4443908b47f4317fc",
+  "prompts": {},
+  "sessions": {
+    "s_f7cd0d6bbec18b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a9bdca59-513c-4fd7-8eab-b5c1f0da98c1",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
