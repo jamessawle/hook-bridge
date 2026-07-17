@@ -1,0 +1,31 @@
+prototype/git_guard.py
+  s_f7cd0d6bbec18b::t_0b1ac2efc9b4b5 1-28
+prototype/hook_bridge/__init__.py
+  s_f7cd0d6bbec18b::t_d8f17fd347a00b 1-104
+prototype/negative_probes.py
+  s_f7cd0d6bbec18b::t_58f3dc8e334d4c 1-23
+prototype/test_git_guard.py
+  s_f7cd0d6bbec18b::t_37065d3a6e5037 1-20
+prototype/variant_a_module_level.py
+  s_f7cd0d6bbec18b::t_853332327629b9 1-49
+prototype/variant_b_named_decorators.py
+  s_f7cd0d6bbec18b::t_cf6a8c62049bb6 1-43
+prototype/variant_c_single_hook.py
+  s_f7cd0d6bbec18b::t_10b33ed0d9cf5b 1-69
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "09c48fc763389e93e25c8f8a6e923646c9fe65f9",
+  "prompts": {},
+  "sessions": {
+    "s_f7cd0d6bbec18b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a9bdca59-513c-4fd7-8eab-b5c1f0da98c1",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
