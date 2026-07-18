@@ -1,0 +1,46 @@
+[project]
+name = "hook-bridge-workspace"
+version = "0"
+description = "Development workspace for hook-bridge (not published)."
+requires-python = ">=3.12"
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+hook-bridge-sdk = { workspace = true }
+
+[dependency-groups]
+# Dev env for the whole workspace: the SDK (editable) plus the tooling that
+# runs the harness-free tests and the annotate-required type check.
+dev = [
+    "hook-bridge-sdk",
+    "pytest>=8",
+    "pyright>=1.1.390",
+]
+
+[tool.pytest.ini_options]
+# Tests live beside the SDK source and beside each example Hook. Every example is
+# a PEP 723 script (hyphen-free module name so it imports in-process); its
+# directory goes on the path so its harness-free tests can import it.
+testpaths = [
+    "packages/hook-bridge-sdk/tests",
+    "examples/deny-list",
+    "examples/command-policy",
+]
+addopts = "--import-mode=importlib"
+pythonpath = ["examples/deny-list", "examples/command-policy"]
+
+[tool.pyright]
+# The annotate-required model from #6: pyright will not infer an unannotated
+# ctx (it comes out Unknown), so authors must annotate. Strict enforces that
+# and validates the handler signature + drives ctx.tool.kind narrowing.
+typeCheckingMode = "strict"
+pythonVersion = "3.12"
+include = [
+    "packages/hook-bridge-sdk/src",
+    "packages/hook-bridge-sdk/tests",
+    "examples/deny-list",
+    "examples/command-policy",
+]
+extraPaths = ["examples/deny-list", "examples/command-policy"]
