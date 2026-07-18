@@ -1,0 +1,55 @@
+packages/hook-bridge-sdk/tests/test_hook.py
+  s_508c3657517a32::t_ae9ba6b5336a44 1-128
+uv.lock
+  s_508c3657517a32::t_2249fad9548249 1-127
+.gitignore
+  s_508c3657517a32::t_cb09445beedecc 4-12
+packages/hook-bridge-sdk/pyproject.toml
+  s_508c3657517a32::t_21ba5714a90214 1-17
+packages/hook-bridge-sdk/src/hook_bridge/__init__.py
+  s_508c3657517a32::t_d46c6afa98ef76 1-50
+packages/hook-bridge-sdk/src/hook_bridge/factories.py
+  s_508c3657517a32::t_662c60c7fdc7fb 1-27
+packages/hook-bridge-sdk/tests/test_contract.py
+  s_508c3657517a32::t_c2c0b07ab502c0 1-74
+docs/adr/0002-tool-before-verdict-verbs.md
+  s_508c3657517a32::t_8a0624fd471c72 1-54
+examples/README.md
+  s_508c3657517a32::t_4983cdba4eb1a1 1-24
+examples/command-policy/command_policy.py
+  s_508c3657517a32::t_694d8f3e807a92 1-73
+examples/command-policy/test_command_policy.py
+  s_508c3657517a32::t_c7c351af52d80b 1-39
+examples/deny-list/deny_list.py
+  s_508c3657517a32::t_0be309f49b7048 1-48
+examples/deny-list/test_deny_list.py
+  s_508c3657517a32::t_ff3530df1c921f 1-21
+packages/hook-bridge-sdk/README.md
+  s_508c3657517a32::t_c772d25061f2cb 1-53
+packages/hook-bridge-sdk/src/hook_bridge/contract.py
+  s_508c3657517a32::t_c0459f3348fb5c 1-138
+packages/hook-bridge-sdk/src/hook_bridge/hook.py
+  s_508c3657517a32::t_8155ea4126d9e8 1-108
+packages/hook-bridge-sdk/src/hook_bridge/wire.py
+  s_508c3657517a32::t_2041953bc19daf 1-109
+packages/hook-bridge-sdk/tests/test_wire.py
+  s_508c3657517a32::t_17142c6ec1b216 1-104
+pyproject.toml
+  s_508c3657517a32::t_449a7190426a00 1-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "5c91801c807f162e943eccc96199305193726236",
+  "prompts": {},
+  "sessions": {
+    "s_508c3657517a32": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f13936bc-14aa-4de0-99a0-16b9618d64f5",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
