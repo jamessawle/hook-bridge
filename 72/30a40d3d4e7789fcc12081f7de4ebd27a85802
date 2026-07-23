@@ -1,0 +1,21 @@
+.github/workflows/publish-runner.yml
+  s_a2dbd2258f3089::t_97e398e5ecab2b 20
+.github/workflows/publish-sdk.yml
+  s_a2dbd2258f3089::t_a2b1b2d16c8d80 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "7230a40d3d4e7789fcc12081f7de4ebd27a85802",
+  "prompts": {},
+  "sessions": {
+    "s_a2dbd2258f3089": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "50d664bd-91bc-496c-8ef5-680f0608191f",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
