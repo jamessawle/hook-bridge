@@ -1,9 +1,10 @@
 [project]
 name = "hook-bridge-runner"
-version = "0.1.0"
+version = "0.1.1"
 description = "The hook-bridge runner: translates a Harness's native hook protocol to and from the generic Contract, running each Hook as a subprocess."
 readme = "README.md"
 requires-python = ">=3.12"
+license = "MIT"
 # Dependency-free by design (#7: no runner-to-SDK dependency) - the runner
 # deals in plain wire-shaped JSON dicts, never the SDK's typed Context/Verdict.
 dependencies = []

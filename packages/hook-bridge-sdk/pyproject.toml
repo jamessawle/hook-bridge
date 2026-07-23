@@ -1,9 +1,10 @@
 [project]
 name = "hook-bridge-sdk"
-version = "0.1.0"
+version = "0.1.1"
 description = "Thin typed authoring SDK for hook-bridge Hooks: write a Hook once against the generic Contract, test it with no harness present."
 readme = "README.md"
 requires-python = ">=3.12"
+license = "MIT"
 # Dependency-free by design: a Hook is a PEP 723 script run via `uv run`, so a
 # lean SDK keeps env materialisation fast and the supply chain small. Boundary
 # schema validation is hand-rolled (see hook_bridge/wire.py).
