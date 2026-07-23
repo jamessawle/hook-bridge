@@ -4,6 +4,7 @@ requires-python = ">=3.12"
 
 [manifest]
 members = [
+    "hook-bridge",
     "hook-bridge-sdk",
     "hook-bridge-workspace",
 ]
@@ -18,6 +19,11 @@ wheels = [
 ]
 
 [[package]]
+name = "hook-bridge"
+version = "0.1.0"
+source = { editable = "packages/hook-bridge" }
+
+[[package]]
 name = "hook-bridge-sdk"
 version = "0.1.0"
 source = { editable = "packages/hook-bridge-sdk" }
@@ -29,6 +35,7 @@ source = { virtual = "." }
 
 [package.dev-dependencies]
 dev = [
+    { name = "hook-bridge" },
     { name = "hook-bridge-sdk" },
     { name = "pyright" },
     { name = "pytest" },
@@ -38,6 +45,7 @@ dev = [
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "hook-bridge", editable = "packages/hook-bridge" },
     { name = "hook-bridge-sdk", editable = "packages/hook-bridge-sdk" },
     { name = "pyright", specifier = ">=1.1.390" },
     { name = "pytest", specifier = ">=8" },
