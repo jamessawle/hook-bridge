@@ -3,7 +3,7 @@
 Owns every claude-code-specific detail of `PreToolUse`: the snake_case native
 stdin payload, the `Bash -> shell` tool-name normalisation, and the
 `hookSpecificOutput.permissionDecision` response shape. See
-docs/research/claude-code-hook-api.md for the sourced facts this codes.
+https://code.claude.com/docs/en/hooks.md for the native protocol this codes.
 """
 
 from __future__ import annotations

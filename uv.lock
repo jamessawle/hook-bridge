@@ -20,12 +20,12 @@ wheels = [
 
 [[package]]
 name = "hook-bridge-runner"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "packages/hook-bridge" }
 
 [[package]]
 name = "hook-bridge-sdk"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "packages/hook-bridge-sdk" }
 
 [[package]]

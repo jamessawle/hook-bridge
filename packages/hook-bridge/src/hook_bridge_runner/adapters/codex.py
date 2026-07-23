@@ -8,7 +8,8 @@ marks `hookSpecificOutput.hookEventName` as **required** — omitting it makes
 the whole response schema-invalid, so codex silently discards the decision
 (logged as `hook: PreToolUse Failed`) and lets the command through regardless
 of `permissionDecision`. `ask` is parsed but not yet honoured by codex even
-with a schema-valid response.
+with a schema-valid response (tracked in #18). See
+https://developers.openai.com/codex/hooks for the native protocol this codes.
 """
 
 from __future__ import annotations

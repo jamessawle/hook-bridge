@@ -2,7 +2,7 @@
 
 hook-bridge is a framework for **building** hooks — the product is the SDK (and,
 later, the runner), not the hooks themselves. These examples exist to show how to
-author and test a Hook against the generic [Contract](../CONTEXT.md); they are
+author and test a Hook against the generic, harness-agnostic Contract; they are
 **illustrative, not maintained policies**. Their rules are deliberately synthetic
 (small static tables, no real CLI parsing), so nothing here rots as an underlying
 tool evolves. Copy one as a starting point and replace its logic with your own.
@@ -21,4 +21,4 @@ harness-free testing story the SDK exists to enable.
 > git shell-outs) was ported against the SDK during development to prove the
 > authoring surface holds up under genuine complexity. That was a validation
 > probe, not a shipped artifact — exactly the kind of evolving logic these
-> examples avoid baking in. See [ADR-0002](../docs/adr/0002-tool-before-verdict-verbs.md).
+> examples avoid baking in.

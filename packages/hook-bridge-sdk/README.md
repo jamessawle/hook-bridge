@@ -1,6 +1,6 @@
 # hook-bridge-sdk
 
-The thin typed authoring SDK for [hook-bridge](../../CONTEXT.md) Hooks.
+The thin typed authoring SDK for [hook-bridge](../../README.md) Hooks.
 
 Write a Hook once against the generic **Contract** — the harness-agnostic
 `Context` it receives and the `Verdict` it returns — and test it in-process with
@@ -11,7 +11,7 @@ harness's native protocol to and from this Contract.
 # /// script
 # dependencies = ["hook-bridge-sdk"]
 # ///
-from hook_bridge import hook, allow, deny, ask, defer, ToolBeforeContext, ToolBeforeVerdict
+from hook_bridge import hook, allow, deny, defer, ToolBeforeContext, ToolBeforeVerdict
 
 
 @hook
@@ -39,7 +39,7 @@ def test_denies_rm_rf() -> None:
 
 Runnable examples live in [`../../examples/`](../../examples/).
 
-## v1 surface
+## Surface
 
 - `@hook` decorator → `Hook[C, V]` with `.dispatch(ctx)` (pure test seam) and
   `.run()` (stdin JSON → dispatch → stdout JSON; exit code = health only).

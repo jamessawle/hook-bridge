@@ -1,12 +1,11 @@
-# hook-bridge
+# hook-bridge-runner
 
 The runner: the CLI a Harness actually invokes. It sits between a Harness and a
-Hook — see [CONTEXT.md](../../CONTEXT.md) and
-[ADR-0003](../../docs/adr/0003-runner-process-boundary.md) for how bytes cross
-the process edge.
+Hook, translating the Harness's native hook protocol to and from the generic
+Contract a Hook is written against.
 
 ```
-hook-bridge --harness <harness> <hook>
+hook-bridge-runner --harness <harness> <hook>
 ```
 
 - Reads the harness's native event JSON from stdin.
@@ -18,8 +17,31 @@ hook-bridge --harness <harness> <hook>
 - Reads the generic wire Verdict JSON the Hook printed to stdout, `encode`s it
   into the harness's native response body + exit code, and writes both back.
 
-v1 ships only the `stub` harness Adapter, which exists to prove this plumbing
-end-to-end. The real claude-code and codex Adapters are sibling work (#12).
+## Adapters
 
-Dependency-free by design (#7: no runner→SDK dependency) — the runner works in
-plain JSON-shaped dicts, never the SDK's typed `Context`/`Verdict`.
+Two real harness Adapters ship today, both proven end-to-end against a live
+`command-policy` example hook run through this runner:
+
+- **claude-code** — `--harness claude-code`. Handles `PreToolUse`, normalises
+  the `Bash` tool to the generic `shell` kind, and encodes Verdicts via
+  `hookSpecificOutput.permissionDecision` (`allow`/`deny`/`ask`; `defer` emits
+  nothing so claude-code's own permission flow decides).
+- **codex** — `--harness codex`. Same `PreToolUse` shape and encoding as
+  claude-code, with one required extra field: codex's own output JSON Schema
+  marks `hookSpecificOutput.hookEventName` as required, so the codex Codec
+  always includes it (omitting it makes codex silently discard the decision
+  and let the command through). **Known gap:** codex parses `ask` but does
+  not yet act on it — a Hook returning `ask()` blocks on claude-code but runs
+  unconfirmed on codex.
+
+A `stub` Adapter also ships; it exists only to exercise the CLI/IO plumbing in
+tests and is not a real harness.
+
+Adding a harness or event only ever touches its own Adapter module —
+`cli.py` is unchanged.
+
+Dependency-free by design — the runner works in plain JSON-shaped dicts,
+never the SDK's typed `Context`/`Verdict`.
+
+See the [root README](../../README.md) for a worked example of wiring a Hook
+into claude-code's `settings.json` or codex's `config.toml`.
