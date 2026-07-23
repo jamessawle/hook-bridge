@@ -1,0 +1,21 @@
+packages/hook-bridge/src/hook_bridge_runner/adapters/codex.py
+  s_cf9cd6151e2ab9::t_e80b3ec27b1d34 5-11,50-53
+packages/hook-bridge/tests/test_codex_adapter.py
+  s_cf9cd6151e2ab9::t_4ce6b3ba53f1a1 66-72,79,92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "b4a70c6fc235e49233b1becf749299ecb4efbebf",
+  "prompts": {},
+  "sessions": {
+    "s_cf9cd6151e2ab9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "dcde1eba-fc7f-447c-9689-e6218001c1c2",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
