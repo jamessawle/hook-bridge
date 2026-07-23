@@ -1,0 +1,106 @@
+"""Unit tests on the codex Adapter's decode/encode/native_event, isolated
+from any subprocess — the fast, harness-free layer of this test suite."""
+
+from __future__ import annotations
+
+from typing import Any
+
+import pytest
+
+from hook_bridge_runner.adapters.codex import codex_adapter
+from hook_bridge_runner.codec import RunnerError
+
+_PRE_TOOL_USE = {
+    "session_id": "s1",
+    "cwd": "/repo",
+    "hook_event_name": "PreToolUse",
+    "tool_name": "Bash",
+    "tool_input": {"command": "git status"},
+}
+
+
+def test_native_event_reads_hook_event_name() -> None:
+    assert codex_adapter.native_event(_PRE_TOOL_USE) == "PreToolUse"
+
+
+def test_native_event_requires_hook_event_name() -> None:
+    with pytest.raises(RunnerError):
+        codex_adapter.native_event({})
+
+
+def test_decode_builds_the_generic_wire_context() -> None:
+    codec = codex_adapter.codecs["PreToolUse"]
+    assert codec.decode(_PRE_TOOL_USE) == {
+        "event": "tool.before",
+        "session_id": "s1",
+        "cwd": "/repo",
+        "tool": {"kind": "shell", "command": "git status"},
+    }
+
+
+def test_decode_requires_session_id_and_cwd() -> None:
+    codec = codex_adapter.codecs["PreToolUse"]
+    with pytest.raises(RunnerError):
+        codec.decode({**_PRE_TOOL_USE, "cwd": None})
+
+
+def test_decode_rejects_a_misrouted_event() -> None:
+    codec = codex_adapter.codecs["PreToolUse"]
+    with pytest.raises(RunnerError):
+        codec.decode({**_PRE_TOOL_USE, "hook_event_name": "PostToolUse"})
+
+
+def test_decode_rejects_an_unsupported_tool() -> None:
+    codec = codex_adapter.codecs["PreToolUse"]
+    with pytest.raises(RunnerError):
+        codec.decode({**_PRE_TOOL_USE, "tool_name": "apply_patch"})
+
+
+def test_decode_requires_the_command_field() -> None:
+    codec = codex_adapter.codecs["PreToolUse"]
+    with pytest.raises(RunnerError):
+        codec.decode({**_PRE_TOOL_USE, "tool_input": {}})
+
+
+_V1_OUTCOMES: list[tuple[dict[str, str], tuple[dict[str, Any], int]]] = [
+    ({"outcome": "allow"}, ({"hookSpecificOutput": {"permissionDecision": "allow"}}, 0)),
+    ({"outcome": "defer"}, ({}, 0)),
+    (
+        {"outcome": "deny", "reason": "no"},
+        (
+            {
+                "hookSpecificOutput": {
+                    "permissionDecision": "deny",
+                    "permissionDecisionReason": "no",
+                }
+            },
+            0,
+        ),
+    ),
+    (
+        {"outcome": "ask", "reason": "confirm?"},
+        (
+            {
+                "hookSpecificOutput": {
+                    "permissionDecision": "ask",
+                    "permissionDecisionReason": "confirm?",
+                }
+            },
+            0,
+        ),
+    ),
+]
+
+
+@pytest.mark.parametrize(("outcome", "expected"), _V1_OUTCOMES)
+def test_encode_maps_every_v1_outcome(
+    outcome: dict[str, str], expected: tuple[dict[str, Any], int]
+) -> None:
+    codec = codex_adapter.codecs["PreToolUse"]
+    assert codec.encode(outcome) == expected
+
+
+def test_encode_rejects_unknown_outcome() -> None:
+    codec = codex_adapter.codecs["PreToolUse"]
+    with pytest.raises(RunnerError):
+        codec.encode({"outcome": "modify"})
