@@ -1,0 +1,45 @@
+name: Bug report
+description: Something isn't working as expected
+labels: ["bug", "needs-triage"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Ideally a minimal Hook, Contract/harness combo, or command that reproduces the issue.
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+
+  - type: input
+    id: harness
+    attributes:
+      label: Harness and version
+      placeholder: "e.g. claude-code 1.x, codex 0.x"
+    validations:
+      required: false
+
+  - type: input
+    id: package-version
+    attributes:
+      label: hook-bridge-sdk / hook-bridge-runner version
+      placeholder: "e.g. hook-bridge-runner 0.1.1"
+    validations:
+      required: false
