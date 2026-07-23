@@ -2,13 +2,13 @@
 
 Codex's hook system was deliberately modelled on claude-code's — same
 `hook_event_name`/`tool_name`/`tool_input` field names on the way in, same
-`hookSpecificOutput.permissionDecision` shape on the way out (see
-docs/research/codex-hook-api.md). The one working deny path today is
-`hookSpecificOutput.permissionDecision: "deny"` (or exit 2) — *not* the
-`continue: false` family, which the research doc flags as parsed-but-ignored
-in current codex. `ask` is likewise parsed but not yet honoured, but this
-codec still emits the documented shape: encoding is about speaking codex's
-protocol correctly, not compensating for its current maturity.
+`hookSpecificOutput.permissionDecision` shape on the way out. Confirmed live
+against codex-cli 0.145.0 (#13): codex's own embedded output JSON Schema
+marks `hookSpecificOutput.hookEventName` as **required** — omitting it makes
+the whole response schema-invalid, so codex silently discards the decision
+(logged as `hook: PreToolUse Failed`) and lets the command through regardless
+of `permissionDecision`. `ask` is parsed but not yet honoured by codex even
+with a schema-valid response.
 """
 
 from __future__ import annotations
@@ -47,7 +47,10 @@ class _CodexToolBeforeCodec(Codec):
             # decides, per #8's `defer` semantics.
             return {}, 0
         if outcome in ("allow", "deny", "ask"):
-            hook_specific_output: dict[str, Any] = {"permissionDecision": outcome}
+            hook_specific_output: dict[str, Any] = {
+                "hookEventName": _NATIVE_EVENT,
+                "permissionDecision": outcome,
+            }
             if outcome in ("deny", "ask"):
                 hook_specific_output["permissionDecisionReason"] = verdict.get("reason", "")
             return {"hookSpecificOutput": hook_specific_output}, 0

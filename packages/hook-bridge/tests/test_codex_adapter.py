@@ -63,13 +63,20 @@ def test_decode_requires_the_command_field() -> None:
 
 
 _V1_OUTCOMES: list[tuple[dict[str, str], tuple[dict[str, Any], int]]] = [
-    ({"outcome": "allow"}, ({"hookSpecificOutput": {"permissionDecision": "allow"}}, 0)),
+    (
+        {"outcome": "allow"},
+        (
+            {"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "allow"}},
+            0,
+        ),
+    ),
     ({"outcome": "defer"}, ({}, 0)),
     (
         {"outcome": "deny", "reason": "no"},
         (
             {
                 "hookSpecificOutput": {
+                    "hookEventName": "PreToolUse",
                     "permissionDecision": "deny",
                     "permissionDecisionReason": "no",
                 }
@@ -82,6 +89,7 @@ _V1_OUTCOMES: list[tuple[dict[str, str], tuple[dict[str, Any], int]]] = [
         (
             {
                 "hookSpecificOutput": {
+                    "hookEventName": "PreToolUse",
                     "permissionDecision": "ask",
                     "permissionDecisionReason": "confirm?",
                 }
