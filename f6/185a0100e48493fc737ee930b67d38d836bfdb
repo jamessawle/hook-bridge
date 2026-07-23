@@ -1,0 +1,27 @@
+.github/workflows/publish-runner.yml
+  s_ec61d3ca85b204::t_6bbc0e01949d2c 25-79
+LICENSE
+  s_ec61d3ca85b204::t_f020e76bd0c382 1-21
+packages/hook-bridge-sdk/pyproject.toml
+  s_ec61d3ca85b204::t_7a336533e06e51 3,7
+packages/hook-bridge/pyproject.toml
+  s_ec61d3ca85b204::t_e32e704a3e7f09 3,7
+scripts/render_homebrew_formula.py
+  s_ec61d3ca85b204::t_e8454d5b832802 1-75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "f6185a0100e48493fc737ee930b67d38d836bfdb",
+  "prompts": {},
+  "sessions": {
+    "s_ec61d3ca85b204": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a90797d5-e073-4788-8c33-9bc0e58d5f35",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
