@@ -1,0 +1,31 @@
+uv.lock
+  s_156a4a66c1bfe6::t_80e17268387cdf 23,28
+README.md
+  s_156a4a66c1bfe6::t_68f51941f038b9 1-113
+examples/README.md
+  s_156a4a66c1bfe6::t_c4ebf50416b03f 5,24
+packages/hook-bridge-sdk/README.md
+  s_156a4a66c1bfe6::t_fd4a9d7cef85db 3,14,42
+packages/hook-bridge/README.md
+  s_156a4a66c1bfe6::t_a412913a55cbcb 1,4-5,8,20,22-47
+packages/hook-bridge/src/hook_bridge_runner/adapters/claude_code.py
+  s_156a4a66c1bfe6::t_df55b50e10c6d0 6
+packages/hook-bridge/src/hook_bridge_runner/adapters/codex.py
+  s_156a4a66c1bfe6::t_435726c8106694 11-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "f9c3893c33f88d82d7e01cd3225906c2ebff2b66",
+  "prompts": {},
+  "sessions": {
+    "s_156a4a66c1bfe6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "7f5787f6-3c8b-4826-aad7-c1d7473fb606",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
