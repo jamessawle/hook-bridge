@@ -1,0 +1,19 @@
+.github/workflows/publish-runner.yml
+  s_ec61d3ca85b204::t_5f4f06ae584bbb 66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "9b8fd50522886b7972e880f463c54631a0189500",
+  "prompts": {},
+  "sessions": {
+    "s_ec61d3ca85b204": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a90797d5-e073-4788-8c33-9bc0e58d5f35",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
