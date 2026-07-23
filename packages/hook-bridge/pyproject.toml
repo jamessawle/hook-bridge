@@ -1,5 +1,5 @@
 [project]
-name = "hook-bridge"
+name = "hook-bridge-runner"
 version = "0.1.0"
 description = "The hook-bridge runner: translates a Harness's native hook protocol to and from the generic Contract, running each Hook as a subprocess."
 readme = "README.md"
@@ -9,7 +9,7 @@ requires-python = ">=3.12"
 dependencies = []
 
 [project.scripts]
-hook-bridge = "hook_bridge_runner.cli:main"
+hook-bridge-runner = "hook_bridge_runner.cli:main"
 
 [build-system]
 requires = ["hatchling"]

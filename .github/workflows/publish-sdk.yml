@@ -1,0 +1,23 @@
+name: Publish hook-bridge-sdk to PyPI
+
+# Trusted Publishing (OIDC) - no PyPI API token stored in the repo.
+# Matches the trusted publisher configured on the hook-bridge-sdk PyPI project
+# for this repo, this workflow file, and the pypi-sdk environment.
+on:
+  push:
+    tags:
+      - "hook-bridge-sdk-v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi-sdk
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+      - run: uv build --package hook-bridge-sdk -o dist
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist

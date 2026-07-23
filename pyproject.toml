@@ -9,14 +9,14 @@ members = ["packages/*"]
 
 [tool.uv.sources]
 hook-bridge-sdk = { workspace = true }
-hook-bridge = { workspace = true }
+hook-bridge-runner = { workspace = true }
 
 [dependency-groups]
 # Dev env for the whole workspace: the SDK + runner (editable) plus the tooling
 # that runs the harness-free tests and the annotate-required type check.
 dev = [
     "hook-bridge-sdk",
-    "hook-bridge",
+    "hook-bridge-runner",
     "pytest>=8",
     "pyright>=1.1.390",
 ]

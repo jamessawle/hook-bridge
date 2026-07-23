@@ -50,7 +50,7 @@ def _bridge(harness: str, hook_path: str, raw: dict[str, Any]) -> tuple[dict[str
 
 
 def _parse_args(argv: list[str] | None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(prog="hook-bridge")
+    parser = argparse.ArgumentParser(prog="hook-bridge-runner")
     parser.add_argument(
         "--harness", required=True, help="the harness invoking this event, e.g. claude-code"
     )

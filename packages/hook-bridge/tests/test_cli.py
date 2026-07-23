@@ -1,4 +1,4 @@
-"""End-to-end: `hook-bridge --harness stub <fixture>` through a real `uv run`
+"""End-to-end: `hook-bridge-runner --harness stub <fixture>` through a real `uv run`
 subprocess — the CLI & IO plumbing this ticket (#11) builds. Uses the `stub`
 Adapter (whose native wire is deliberately unlike the generic Contract) and a
 dependency-free fixture Hook so no PyPI resolution is needed."""

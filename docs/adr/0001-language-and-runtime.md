@@ -47,8 +47,8 @@ workspace) holding the runner, the SDK, and the shared Contract types as a singl
 source of truth.
 
 **Runtime — Python 3.12 floor, managed with `uv`.** Distributed as
-`uvx hook-bridge` / `pipx install hook-bridge`; triggered from a Harness config as
-e.g. `uvx hook-bridge --harness claude-code ./git-guard.py`.
+`uvx hook-bridge-runner` / `pipx install hook-bridge-runner`; triggered from a
+Harness config as e.g. `uvx hook-bridge-runner --harness claude-code ./git-guard.py`.
 
 ## Consequences
 

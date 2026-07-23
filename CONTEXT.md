@@ -13,7 +13,7 @@ User-authored logic that reacts to a harness event and returns a Verdict. Writte
 _Avoid_: Plugin, handler, script
 
 **hook-bridge**:
-The CLI that sits between a Harness and a Hook: it converts a Harness's native event into generic Context, invokes the Hook, and converts the Hook's Verdict back into the Harness's native response. Invoked as `hook-bridge --harness <harness> <hook>`.
+The CLI that sits between a Harness and a Hook: it converts a Harness's native event into generic Context, invokes the Hook, and converts the Hook's Verdict back into the Harness's native response. Published on PyPI as `hook-bridge-runner`; invoked as `hook-bridge-runner --harness <harness> <hook>`.
 
 **Contract**:
 The harness-agnostic API a Hook is written against — the generic Context it receives and the Verdict it returns. The heart of the framework.
