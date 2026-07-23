@@ -1,0 +1,25 @@
+.github/ISSUE_TEMPLATE/bug_report.yml
+  s_3b7eab8f23d828::t_5a6ab23d28068f 1-45
+.github/ISSUE_TEMPLATE/config.yml
+  s_3b7eab8f23d828::t_0f4503f3544d8f 1
+.github/ISSUE_TEMPLATE/feature_request.yml
+  s_3b7eab8f23d828::t_def2947912bc4b 1-26
+.github/pull_request_template.md
+  s_3b7eab8f23d828::t_3e0bb131836fb9 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "79a34b96043a09f391579c8cbc5ee3be93ff259b",
+  "prompts": {},
+  "sessions": {
+    "s_3b7eab8f23d828": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "172199de-3d26-4b26-9456-b14a263446fe",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
