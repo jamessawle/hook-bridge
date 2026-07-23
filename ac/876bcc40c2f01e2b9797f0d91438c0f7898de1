@@ -1,0 +1,35 @@
+uv.lock
+  s_a2dbd2258f3089::t_1411fd7cf1e33f 7,22,38,48
+.github/workflows/publish-runner.yml
+  s_a2dbd2258f3089::t_d6771840f578ce 1-23
+.github/workflows/publish-sdk.yml
+  s_a2dbd2258f3089::t_0cc2c203bfd816 1-23
+CONTEXT.md
+  s_a2dbd2258f3089::t_87509515c04540 16
+docs/adr/0001-language-and-runtime.md
+  s_a2dbd2258f3089::t_bbdd23c60cb335 50-51
+packages/hook-bridge/pyproject.toml
+  s_a2dbd2258f3089::t_0e1c3026e7aded 2,12
+packages/hook-bridge/src/hook_bridge_runner/cli.py
+  s_a2dbd2258f3089::t_968a45567866c5 53
+packages/hook-bridge/tests/test_cli.py
+  s_a2dbd2258f3089::t_beacec39dad98c 1
+pyproject.toml
+  s_a2dbd2258f3089::t_0152344b504dcc 12,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "ac876bcc40c2f01e2b9797f0d91438c0f7898de1",
+  "prompts": {},
+  "sessions": {
+    "s_a2dbd2258f3089": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "50d664bd-91bc-496c-8ef5-680f0608191f",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
