@@ -1,0 +1,19 @@
+.github/CODEOWNERS
+  s_3b7eab8f23d828::t_2cabb8814a3749 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "359fd46b424f829bceacb9c1635a410386a08f2d",
+  "prompts": {},
+  "sessions": {
+    "s_3b7eab8f23d828": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "172199de-3d26-4b26-9456-b14a263446fe",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
