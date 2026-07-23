@@ -7,7 +7,6 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-
 from hook_bridge_runner.hook_process import HookProcessError, run_hook_process
 
 FAKE_HOOK = str(Path(__file__).parent / "fixtures" / "fake_hook.py")

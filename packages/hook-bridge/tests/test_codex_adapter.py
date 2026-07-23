@@ -6,7 +6,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from hook_bridge_runner.adapters.codex import codex_adapter
 from hook_bridge_runner.codec import RunnerError
 

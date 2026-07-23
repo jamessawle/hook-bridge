@@ -17,7 +17,8 @@ import inspect
 import json
 import sys
 import typing
-from typing import Any, Callable, Generic, TypeVar
+from collections.abc import Callable
+from typing import Any, Generic, TypeVar
 
 from .contract import Context, Verdict
 from .wire import BoundaryError, decode_context, encode_verdict

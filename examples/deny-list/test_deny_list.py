@@ -6,9 +6,8 @@ with SDK-built Context — no harness, no subprocess, no JSON.
 
 from __future__ import annotations
 
-from hook_bridge import shell, tool_before
-
 from deny_list import deny_list
+from hook_bridge import shell, tool_before
 
 
 def test_allows_an_ordinary_command() -> None:

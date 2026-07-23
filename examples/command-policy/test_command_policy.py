@@ -6,9 +6,8 @@ process through the real Contract types with no harness present.
 
 from __future__ import annotations
 
-from hook_bridge import ToolBeforeVerdict, shell, tool_before
-
 from command_policy import command_policy
+from hook_bridge import ToolBeforeVerdict, shell, tool_before
 
 
 def decide(command: str) -> ToolBeforeVerdict:

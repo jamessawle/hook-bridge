@@ -19,6 +19,7 @@ dev = [
     "hook-bridge-runner",
     "pytest>=8",
     "pyright>=1.1.390",
+    "ruff>=0.8",
 ]
 
 [tool.pytest.ini_options]
@@ -34,6 +35,16 @@ testpaths = [
 ]
 addopts = "--import-mode=importlib"
 pythonpath = ["examples/deny-list", "examples/command-policy"]
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["examples/*/__pycache__"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+# hook_bridge.hook.Hook predates PEP 695 generics (py3.12); left as
+# TypeVar-based Generic rather than rewritten as part of adding lint.
+ignore = ["UP046", "UP047"]
 
 [tool.pyright]
 # The annotate-required model from #6: pyright will not infer an unannotated

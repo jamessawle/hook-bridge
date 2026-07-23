@@ -8,7 +8,7 @@ exercises the Hook through the exact same Contract types the runner uses.
 
 from __future__ import annotations
 
-from .contract import ShellTool, ToolBeforeContext, Tool
+from .contract import ShellTool, Tool, ToolBeforeContext
 
 
 def shell(command: str) -> ShellTool:

@@ -7,7 +7,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
 from hook_bridge_runner.adapters.claude_code import claude_code_adapter
 from hook_bridge_runner.codec import RunnerError
 

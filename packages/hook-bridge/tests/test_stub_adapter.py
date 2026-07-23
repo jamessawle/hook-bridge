@@ -4,7 +4,6 @@ any subprocess — the fast, harness-free layer of this test suite."""
 from __future__ import annotations
 
 import pytest
-
 from hook_bridge_runner.adapters.stub import stub_adapter
 from hook_bridge_runner.codec import RunnerError
 

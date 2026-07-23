@@ -7,7 +7,6 @@ import json
 from typing import Any
 
 import pytest
-
 from hook_bridge import (
     ToolBeforeContext,
     ToolBeforeVerdict,

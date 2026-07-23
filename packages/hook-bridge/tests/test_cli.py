@@ -11,7 +11,6 @@ import sys
 from pathlib import Path
 
 import pytest
-
 from hook_bridge_runner.cli import main
 
 FAKE_HOOK = str(Path(__file__).parent / "fixtures" / "fake_hook.py")
