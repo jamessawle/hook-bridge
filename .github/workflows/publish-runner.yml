@@ -17,7 +17,7 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v9
+      - uses: astral-sh/setup-uv@v9.0.0
       - run: uv build --package hook-bridge-runner -o dist
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
