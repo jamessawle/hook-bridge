@@ -1,0 +1,49 @@
+packages/hook-bridge/tests/test_stub_adapter.py
+  s_1ff6ca9b162d6f::t_29e8311aa6225f 1-59
+uv.lock
+  s_1ff6ca9b162d6f::t_12a85cc214aee0 7,21-25,38,48
+docs/adr/0003-runner-process-boundary.md
+  s_1ff6ca9b162d6f::t_1ef3977878686e 1-90
+packages/hook-bridge/README.md
+  s_1ff6ca9b162d6f::t_8a1349c199c082 1-25
+packages/hook-bridge/pyproject.toml
+  s_1ff6ca9b162d6f::t_1c8faae1306500 1-19
+packages/hook-bridge/src/hook_bridge_runner/__init__.py
+  s_1ff6ca9b162d6f::t_bdc7d14b9c2e9f 1-20
+packages/hook-bridge/src/hook_bridge_runner/adapters/__init__.py
+  s_1ff6ca9b162d6f::t_3e97bc874006d4 1-17
+packages/hook-bridge/src/hook_bridge_runner/adapters/stub.py
+  s_1ff6ca9b162d6f::t_6f6a80d6a1d646 1-51
+packages/hook-bridge/src/hook_bridge_runner/cli.py
+  s_1ff6ca9b162d6f::t_ab490738865882 1-73
+packages/hook-bridge/src/hook_bridge_runner/codec.py
+  s_1ff6ca9b162d6f::t_d8ed82f51efc85 1-43
+packages/hook-bridge/src/hook_bridge_runner/hook_process.py
+  s_1ff6ca9b162d6f::t_ec0de5546204f4 1-41
+packages/hook-bridge/tests/fixtures/crashing_hook.py
+  s_1ff6ca9b162d6f::t_8f4e245aee9355 1-12
+packages/hook-bridge/tests/fixtures/fake_hook.py
+  s_1ff6ca9b162d6f::t_3fdcdb788bef29 1-28
+packages/hook-bridge/tests/test_cli.py
+  s_1ff6ca9b162d6f::t_c6862141d478fa 1-66
+packages/hook-bridge/tests/test_hook_process.py
+  s_1ff6ca9b162d6f::t_b03eb1c0c70815 1-25
+pyproject.toml
+  s_1ff6ca9b162d6f::t_0c7380a5a8f211 12,15-16,19,25-28,31,47-48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "1f7a392c3abb6633e5f901f48d47360badce503a",
+  "prompts": {},
+  "sessions": {
+    "s_1ff6ca9b162d6f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "58a81ebf-1175-4795-8d2e-7ef1387819b1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
