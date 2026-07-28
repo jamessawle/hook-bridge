@@ -52,6 +52,20 @@ runner invokes each Hook as `uv run <hook>`, which is what lets a Hook declare
 its own `hook-bridge-sdk` dependency inline and run with no separate install
 step.
 
+## Development
+
+Development requires Git and Mise 2026.5.2 or later:
+
+```sh
+mise trust
+mise run setup
+mise run validate
+```
+
+Mise pins the Python and uv toolchain and provides the repository workflow.
+Python packages and development dependencies remain declared in
+`pyproject.toml` and locked in `uv.lock`.
+
 ## Write a Hook
 
 See [`packages/hook-bridge-sdk/`](packages/hook-bridge-sdk/) for the

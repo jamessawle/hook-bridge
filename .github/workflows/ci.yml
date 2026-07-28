@@ -8,11 +8,23 @@ permissions:
 
 jobs:
   test:
+    name: Validate
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     steps:
-      - uses: actions/checkout@v7
-      - uses: astral-sh/setup-uv@v9.0.0
-      - run: uv sync --all-packages
-      - run: uv run ruff check .
-      - run: uv run pyright
-      - run: uv run pytest
+      - name: Check out repository
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up development tools
+        uses: jdx/mise-action@v3
+        with:
+          cache: true
+
+      - name: Set up repository
+        run: mise run setup
+
+      - name: Validate
+        run: mise run validate
