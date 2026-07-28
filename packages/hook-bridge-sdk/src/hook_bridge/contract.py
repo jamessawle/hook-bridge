@@ -157,7 +157,7 @@ def defer() -> ToolBeforeVerdict:
 
 
 # ---------------------------------------------------------------------------
-# `tool.after` Verdict (ADR-0004): a tool has already run, so permission
+# `tool.after` Verdict (ADR-0006): a tool has already run, so permission
 # verbs (`allow`/`deny`/`ask`) have no meaning. Three verbs instead: `pass_`
 # (no opinion), `block` (stop the agent proceeding, with a reason),
 # `annotate` (inject context without blocking).
@@ -173,7 +173,7 @@ class ToolAfterVerdict(Verdict):
     Three generic outcomes (v1): `pass_` (no opinion), `block` (stop the
     agent from proceeding, with a mandatory reason) and `annotate` (inject
     context for the agent without blocking, with mandatory content).
-    Rewriting the tool's own output is a documented, unbuilt seam (ADR-0004).
+    Rewriting the tool's own output is a documented, unbuilt seam.
 
     Construct these via the `pass_()` / `block()` / `annotate()` helpers
     rather than directly.

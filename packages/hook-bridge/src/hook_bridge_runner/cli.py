@@ -2,7 +2,8 @@
 
 `hook-bridge --harness <h> <hook>` reads the harness's native event off
 stdin, selects the `Codec` for `(harness, native event)` by peeking that
-event name (#8, #11 — see docs/adr/0003-runner-process-boundary.md),
+event name (#8, #11 — see
+docs/adr/0003-hooks-communicate-across-a-language-neutral-subprocess-boundary.md),
 `decode`s to the generic wire Context, runs the Hook as a subprocess, and
 `encode`s the Hook's generic wire Verdict back into the harness's native
 response + exit code.

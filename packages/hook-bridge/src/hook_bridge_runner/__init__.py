@@ -2,7 +2,8 @@
 
 Translates a Harness's native hook protocol to and from the generic wire
 Contract, running each Hook as a subprocess. See CONTEXT.md and
-docs/adr/0003-runner-process-boundary.md at the repo root for the design.
+docs/adr/0003-hooks-communicate-across-a-language-neutral-subprocess-boundary.md
+at the repo root for the design.
 """
 
 from __future__ import annotations

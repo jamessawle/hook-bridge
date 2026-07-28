@@ -1,7 +1,7 @@
 """Spawns a Hook as a subprocess and pipes the generic wire JSON across the
 process edge.
 
-Per ADR-0001, hook-bridge invokes a Hook via `uv run <hook>`, passing the
+Per ADR-0003, hook-bridge invokes a Hook via `uv run <hook>`, passing the
 generic Context as JSON on stdin and reading the Verdict from stdout / exit
 code. This is exactly the stdin/stdout shell `hook.run()` already implements
 in the SDK (#6, #9) — this module does not change that contract, it is the

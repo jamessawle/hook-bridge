@@ -63,7 +63,8 @@ A Codec declares its `native_event` and `contract_event` and implements the
 pure `decode`/`encode` pair. Add it to the Harness's `adapter.py` composition
 list; `HarnessAdapter` validates and indexes it. No existing Codec module,
 `cli.py`, or `hook_process.py` changes when a Harness gains support for an
-existing Contract event. See ADR-0005.
+existing Contract event. See
+[ADR-0005](../../docs/adr/0005-harness-event-translations-are-independent-explicitly-composed-units.md).
 
 Dependency-free by design — the runner works in plain JSON-shaped dicts,
 never the SDK's typed `Context`/`Verdict`.
