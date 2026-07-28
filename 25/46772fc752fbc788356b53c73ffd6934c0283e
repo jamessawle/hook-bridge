@@ -1,0 +1,43 @@
+.agents/skills/domain-modeling/ADR-FORMAT.md
+  s_2eaa6e2621d119::t_204a62088a66e1 29-33,36,41,43,54-61
+docs/adr/0001-contract-admits-only-harness-independent-concepts.md
+  s_2eaa6e2621d119::t_f3aebd1e86d722 1,6-10
+docs/adr/0002-canonical-event-names-use-category-moment-namespaces.md
+  s_2eaa6e2621d119::t_4886d06ea131b3 1-9
+docs/adr/0003-hooks-communicate-across-a-language-neutral-subprocess-boundary.md
+  s_2eaa6e2621d119::t_1a87e3ff10ab7e 1-10
+docs/adr/0004-hooks-are-portable-python-programs-with-inline-dependencies.md
+  s_2eaa6e2621d119::t_ff00903ba0370c 1-10
+docs/adr/0005-harness-event-translations-are-independent-explicitly-composed-units.md
+  s_2eaa6e2621d119::t_ee31f5538f8584 1-10
+docs/adr/0006-response-types-are-reused-according-to-semantic-capability.md
+  s_2eaa6e2621d119::t_e3983975e6309d 1-10
+packages/hook-bridge-sdk/README.md
+  s_2eaa6e2621d119::t_ce258cec2da031 50-51
+packages/hook-bridge-sdk/src/hook_bridge/contract.py
+  s_2eaa6e2621d119::t_1fd0487ddc74c1 160,176
+packages/hook-bridge-sdk/src/hook_bridge/wire.py
+  s_2eaa6e2621d119::t_8a0c6f46cfda19 3,40
+packages/hook-bridge/src/hook_bridge_runner/__init__.py
+  s_2eaa6e2621d119::t_fc20ca5e97a664 5-6
+packages/hook-bridge/src/hook_bridge_runner/hook_process.py
+  s_2eaa6e2621d119::t_db8c8b356b0ca1 4
+packages/hook-bridge/tests/test_hook_process.py
+  s_2eaa6e2621d119::t_259370a25eed9b 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "2546772fc752fbc788356b53c73ffd6934c0283e",
+  "prompts": {},
+  "sessions": {
+    "s_2eaa6e2621d119": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faaca-34fc-7103-8b41-d8ae9e53212f",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
