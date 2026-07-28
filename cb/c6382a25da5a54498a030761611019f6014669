@@ -1,0 +1,19 @@
+docs/research/codex-tool-protocols.md
+  s_ff1eb18ff1c782::t_0c65e00c929af7 1-323
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "cbc6382a25da5a54498a030761611019f6014669",
+  "prompts": {},
+  "sessions": {
+    "s_ff1eb18ff1c782": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faa96-ad02-7252-8c40-ec3591efb702",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
