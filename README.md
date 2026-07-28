@@ -66,6 +66,45 @@ Mise pins the Python and uv toolchain and provides the repository workflow.
 Python packages and development dependencies remain declared in
 `pyproject.toml` and locked in `uv.lock`.
 
+### Sandbox development
+
+Docker Sandbox is the optional isolated path for agent development. The
+configuration is tested with sbx 0.35.0.
+
+On a new machine, authenticate Docker, GitHub, and Codex, then choose a
+host-global network policy:
+
+```sh
+sbx login
+gh auth login
+gh auth token | sbx secret set -g github
+sbx secret set -g openai --oauth
+sbx policy init deny-all
+```
+
+Create or replace the sandbox:
+
+```sh
+mise run sandbox rebuild
+```
+
+For subsequent sessions:
+
+```sh
+mise run sandbox
+```
+
+Each session runs `mise run setup` before attaching, so dependency changes do
+not require a rebuild. The repository is mounted directly, so edits remain
+visible on the host. The sandbox keeps its Linux virtual environment in
+VM-local storage rather than replacing the host's macOS `.venv`, and keeps
+Python bytecode caches out of the mounted repository.
+
+Rebuilding removes the sandbox's installed state and agent history, but not
+repository files.
+
+See [`.docker-sbx/README.md`](.docker-sbx/README.md) for configuration details.
+
 ## Write a Hook
 
 See [`packages/hook-bridge-sdk/`](packages/hook-bridge-sdk/) for the
