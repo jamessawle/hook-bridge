@@ -1,0 +1,19 @@
+docs/research/claude-code-tool-protocols.md
+  s_a859db647cc8ae::t_0290093af5375e 1-320
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "2d8acbac5d5874e43a5084225d821cef9116d771",
+  "prompts": {},
+  "sessions": {
+    "s_a859db647cc8ae": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faa96-937b-73b1-9a28-a7f7e27cf579",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
