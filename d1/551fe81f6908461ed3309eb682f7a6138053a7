@@ -1,0 +1,25 @@
+.mise/tasks/sandbox
+  s_95ae6bf44ea1f3::t_a757172a059974 1-9
+.docker-sbx/kits/network-mise-python-uv/spec.yaml
+  s_95ae6bf44ea1f3::t_6da3b72d789785 1-20
+.docker-sbx/sandbox.sh
+  s_95ae6bf44ea1f3::t_9bc5a4ec1ed874 1-69
+docs/adr/0008-offer-docker-sandbox-for-agent-development.md
+  s_95ae6bf44ea1f3::t_c061019f0d2e86 1-53
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "d1551fe81f6908461ed3309eb682f7a6138053a7",
+  "prompts": {},
+  "sessions": {
+    "s_95ae6bf44ea1f3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faae5-df5f-7f20-b970-eebf0e82288d",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
