@@ -1,0 +1,31 @@
+.docker-sbx/kits/network-mise-python-uv/spec.yaml
+  s_95ae6bf44ea1f3::t_6da3b72d789785 1-20
+  s_95ae6bf44ea1f3::t_5b68a1c21e61b7 21-23
+  s_95ae6bf44ea1f3::t_fa918ea0bf099f 24-26
+  s_95ae6bf44ea1f3::t_fa7b55a5d2ce09 27-29
+  s_95ae6bf44ea1f3::t_9f640b2b8fc30c 30
+.mise/tasks/sandbox
+  s_95ae6bf44ea1f3::t_a757172a059974 1-9
+README.md
+  s_95ae6bf44ea1f3::t_0c3dd5cabe78df 69-107
+.docker-sbx/sandbox.sh
+  s_95ae6bf44ea1f3::t_9bc5a4ec1ed874 1-69
+.docker-sbx/README.md
+  s_95ae6bf44ea1f3::t_84ed3fd391f509 1-28
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "34b7ceddff8ae3ae2478e051117fac27f31b9c84",
+  "prompts": {},
+  "sessions": {
+    "s_95ae6bf44ea1f3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faae5-df5f-7f20-b970-eebf0e82288d",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
