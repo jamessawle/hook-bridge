@@ -139,7 +139,7 @@ fails loudly instead of inventing an `exit_code`. Output-rewrite
 
 ```
 packages/hook-bridge-sdk/   the authoring SDK (write Hooks against this)
-packages/hook-bridge/       the runner CLI (hook-bridge-runner)
+packages/hook-bridge/       the runner CLI and per-Harness Codec modules
 examples/                   runnable, harness-free-tested example Hooks
 docs/adr/                   architecture decision records
 ```

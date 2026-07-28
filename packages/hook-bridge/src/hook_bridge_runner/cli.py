@@ -40,10 +40,7 @@ def _bridge(harness: str, hook_path: str, raw: dict[str, Any]) -> tuple[dict[str
     adapter = ADAPTERS.get(harness)
     if adapter is None:
         raise RunnerError(f"unknown harness {harness!r}")
-    native_event = adapter.native_event(raw)
-    codec = adapter.codecs.get(native_event)
-    if codec is None:
-        raise RunnerError(f"harness {harness!r} has no codec for event {native_event!r}")
+    codec = adapter.codec_for(raw)
     context = codec.decode(raw)
     verdict = run_hook_process(hook_path, context)
     return codec.encode(verdict)

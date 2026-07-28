@@ -1,12 +1,11 @@
-"""Unit tests on the codex Adapter's decode/encode/native_event, isolated
-from any subprocess — the fast, harness-free layer of this test suite."""
+"""Interface tests for the codex `tool.before` Codec."""
 
 from __future__ import annotations
 
 from typing import Any
 
 import pytest
-from hook_bridge_runner.adapters.codex import codex_adapter
+from hook_bridge_runner.adapters.codex.tool_before import codec
 from hook_bridge_runner.codec import RunnerError
 
 _PRE_TOOL_USE = {
@@ -23,17 +22,12 @@ _PRE_TOOL_USE = {
 }
 
 
-def test_native_event_reads_hook_event_name() -> None:
-    assert codex_adapter.native_event(_PRE_TOOL_USE) == "PreToolUse"
-
-
-def test_native_event_requires_hook_event_name() -> None:
-    with pytest.raises(RunnerError):
-        codex_adapter.native_event({})
+def test_declares_its_native_and_contract_events() -> None:
+    assert codec.native_event == "PreToolUse"
+    assert codec.contract_event == "tool.before"
 
 
 def test_decode_builds_the_generic_wire_context() -> None:
-    codec = codex_adapter.codecs["PreToolUse"]
     assert codec.decode(_PRE_TOOL_USE) == {
         "event": "tool.before",
         "session_id": "s1",
@@ -43,30 +37,26 @@ def test_decode_builds_the_generic_wire_context() -> None:
 
 
 def test_decode_requires_session_id_and_cwd() -> None:
-    codec = codex_adapter.codecs["PreToolUse"]
     with pytest.raises(RunnerError):
         codec.decode({**_PRE_TOOL_USE, "cwd": None})
 
 
 def test_decode_rejects_a_misrouted_event() -> None:
-    codec = codex_adapter.codecs["PreToolUse"]
     with pytest.raises(RunnerError):
         codec.decode({**_PRE_TOOL_USE, "hook_event_name": "PostToolUse"})
 
 
 def test_decode_rejects_an_unsupported_tool() -> None:
-    codec = codex_adapter.codecs["PreToolUse"]
     with pytest.raises(RunnerError):
         codec.decode({**_PRE_TOOL_USE, "tool_name": "apply_patch"})
 
 
 def test_decode_requires_the_command_field() -> None:
-    codec = codex_adapter.codecs["PreToolUse"]
     with pytest.raises(RunnerError):
         codec.decode({**_PRE_TOOL_USE, "tool_input": {}})
 
 
-_VALID_CODEX_ENCODINGS: list[tuple[dict[str, str], tuple[dict[str, Any], int]]] = [
+_OUTCOMES: list[tuple[dict[str, str], tuple[dict[str, Any], int]]] = [
     ({"outcome": "allow"}, ({}, 0)),
     ({"outcome": "defer"}, ({}, 0)),
     (
@@ -82,30 +72,17 @@ _VALID_CODEX_ENCODINGS: list[tuple[dict[str, str], tuple[dict[str, Any], int]]] 
             0,
         ),
     ),
-    (
-        {"outcome": "ask", "reason": "confirm?"},
-        ({}, 0),
-    ),
+    ({"outcome": "ask", "reason": "confirm?"}, ({}, 0)),
 ]
 
 
-@pytest.mark.parametrize(("outcome", "expected"), _VALID_CODEX_ENCODINGS)
-def test_encode_maps_every_v1_outcome_to_valid_codex_output(
+@pytest.mark.parametrize(("outcome", "expected"), _OUTCOMES)
+def test_encode_maps_every_outcome_to_valid_codex_output(
     outcome: dict[str, str], expected: tuple[dict[str, Any], int]
 ) -> None:
-    codec = codex_adapter.codecs["PreToolUse"]
     assert codec.encode(outcome) == expected
 
 
 def test_encode_rejects_unknown_outcome() -> None:
-    codec = codex_adapter.codecs["PreToolUse"]
     with pytest.raises(RunnerError):
         codec.encode({"outcome": "modify"})
-
-
-def test_post_tool_use_is_not_registered_without_a_faithful_result_mapping() -> None:
-    # Codex 0.145.0 sends Bash tool_response as the output string alone. The
-    # generic ToolResult also requires exit_code, so an Adapter would have to
-    # invent data. Leave the event unsupported and let the CLI fail loudly.
-    assert codex_adapter.native_event({"hook_event_name": "PostToolUse"}) == "PostToolUse"
-    assert "PostToolUse" not in codex_adapter.codecs
