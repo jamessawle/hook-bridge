@@ -1,8 +1,8 @@
-"""The claude-code harness Adapter (#12).
+"""The claude-code harness Adapter (#12, #25).
 
-Owns every claude-code-specific detail of `PreToolUse`: the snake_case native
-stdin payload, the `Bash -> shell` tool-name normalisation, and the
-`hookSpecificOutput.permissionDecision` response shape. See
+Owns every claude-code-specific detail of `PreToolUse`/`PostToolUse`: the
+snake_case native stdin payload, the `Bash -> shell` tool-name normalisation,
+and the `hookSpecificOutput` response shapes. See
 https://code.claude.com/docs/en/hooks.md for the native protocol this codes.
 """
 
@@ -13,6 +13,7 @@ from typing import Any
 from ..codec import Codec, RunnerError
 
 _NATIVE_EVENT = "PreToolUse"
+_NATIVE_AFTER_EVENT = "PostToolUse"
 
 # Inbound tool normalisation (#8): only known native tool names map onto a
 # generic `kind`. Anything else is Unsupported, loud-fail, never pass-through.
@@ -54,6 +55,40 @@ class _ClaudeCodeToolBeforeCodec(Codec):
         raise RunnerError(f"claude-code codec cannot encode outcome {outcome!r}")
 
 
+class _ClaudeCodeToolAfterCodec(Codec):
+    def decode(self, raw: dict[str, Any]) -> dict[str, Any]:
+        event = raw.get("hook_event_name")
+        if event != _NATIVE_AFTER_EVENT:
+            raise RunnerError(
+                f"claude-code tool.after codec received a misrouted event {event!r}"
+            )
+        session_id = raw.get("session_id")
+        cwd = raw.get("cwd")
+        if not isinstance(session_id, str) or not isinstance(cwd, str):
+            raise RunnerError("claude-code PostToolUse payload missing 'session_id'/'cwd'")
+        return {
+            "event": "tool.after",
+            "session_id": session_id,
+            "cwd": cwd,
+            "tool": _decode_tool(raw),
+            "result": _decode_result(raw),
+        }
+
+    def encode(self, verdict: dict[str, Any]) -> tuple[dict[str, Any], int]:
+        outcome = verdict.get("outcome")
+        if outcome == "pass":
+            return {}, 0
+        if outcome == "block":
+            return {"decision": "block", "reason": verdict.get("message", "")}, 0
+        if outcome == "annotate":
+            hook_specific_output = {
+                "hookEventName": _NATIVE_AFTER_EVENT,
+                "additionalContext": verdict.get("message", ""),
+            }
+            return {"hookSpecificOutput": hook_specific_output}, 0
+        raise RunnerError(f"claude-code codec cannot encode outcome {outcome!r}")
+
+
 def _decode_tool(raw: dict[str, Any]) -> dict[str, Any]:
     tool_name = raw.get("tool_name")
     kind = _NORMALISE.get(tool_name) if isinstance(tool_name, str) else None
@@ -66,14 +101,28 @@ def _decode_tool(raw: dict[str, Any]) -> dict[str, Any]:
     return {"kind": "shell", "command": command}
 
 
-def _require_mapping(raw: object) -> dict[str, Any]:
+def _decode_result(raw: dict[str, Any]) -> dict[str, Any]:
+    tool_response = _require_mapping(raw.get("tool_response"), "claude-code tool_response")
+    text = tool_response.get("text")
+    exit_code = tool_response.get("exitCode")
+    if not isinstance(text, str):
+        raise RunnerError("claude-code tool_response missing 'text'")
+    if not isinstance(exit_code, int) or isinstance(exit_code, bool):
+        raise RunnerError("claude-code tool_response missing 'exitCode'")
+    return {"text": text, "exit_code": exit_code}
+
+
+def _require_mapping(raw: object, what: str = "claude-code Bash tool_input") -> dict[str, Any]:
     if not isinstance(raw, dict):
-        raise RunnerError("claude-code Bash tool_input missing 'command'")
+        raise RunnerError(f"{what} missing or malformed")
     return raw  # pyright: ignore[reportUnknownVariableType]
 
 
 class _ClaudeCodeAdapter:
-    codecs: dict[str, Codec] = {_NATIVE_EVENT: _ClaudeCodeToolBeforeCodec()}
+    codecs: dict[str, Codec] = {
+        _NATIVE_EVENT: _ClaudeCodeToolBeforeCodec(),
+        _NATIVE_AFTER_EVENT: _ClaudeCodeToolAfterCodec(),
+    }
 
     def native_event(self, raw: dict[str, Any]) -> str:
         event = raw.get("hook_event_name")

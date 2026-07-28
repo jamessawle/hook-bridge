@@ -6,9 +6,14 @@ translates each harness's native hook protocol to and from that contract, so
 the same Hook file runs unchanged on multiple harnesses and can be tested
 with no harness present at all.
 
-Today it supports two harnesses — [claude-code](https://code.claude.com/docs/en/hooks.md)
-and [codex](https://developers.openai.com/codex/hooks) — for the `tool.before`
-event (block/allow/ask a tool call before it runs, e.g. a shell command).
+Today [claude-code](https://code.claude.com/docs/en/hooks.md) supports the full
+`tool.before` and `tool.after` Contracts. The
+[codex](https://developers.openai.com/codex/hooks) Adapter accepts and encodes
+all four `tool.before` outcomes: `deny` blocks, while
+`allow`, `ask`, and `defer` produce empty output and continue through Codex's
+normal permission flow. In particular, `ask` cannot force Codex to prompt.
+Codex's native `PostToolUse` also omits the exit status required by the generic
+`tool.after` result Contract.
 
 A few terms recur throughout this repo: a **Harness** is the agent host that
 fires hook events (claude-code, codex); a **Hook** is the user-authored logic
@@ -22,7 +27,7 @@ Contract.
 
 | Package | What it is | Published as |
 |---|---|---|
-| [`hook-bridge-sdk`](packages/hook-bridge-sdk/) | The authoring SDK. What you import when *writing* a Hook: `@hook`, `allow()`/`deny()`/`ask()`/`defer()`, the typed `Context`/`Verdict`. Dependency-free, harness-ignorant. | [PyPI](https://pypi.org/project/hook-bridge-sdk/) — a Hook declares it inline via [PEP 723](https://peps.python.org/pep-0723/), so you never `pip install` it yourself. |
+| [`hook-bridge-sdk`](packages/hook-bridge-sdk/) | The authoring SDK. What you import when *writing* a Hook: `@hook`, `allow()`/`deny()`/`ask()`/`defer()` for `tool.before`, `pass_()`/`block()`/`annotate()` for `tool.after`, the typed `Context`/`Verdict`. Dependency-free, harness-ignorant. | [PyPI](https://pypi.org/project/hook-bridge-sdk/) — a Hook declares it inline via [PEP 723](https://peps.python.org/pep-0723/), so you never `pip install` it yourself. |
 | [`hook-bridge-runner`](packages/hook-bridge/) | The CLI a harness actually invokes. Translates the harness's native event JSON to the SDK's generic wire format, spawns the Hook, and translates its Verdict back. | [PyPI](https://pypi.org/project/hook-bridge-runner/) (`hook-bridge-runner`), or via the [Homebrew tap](https://github.com/jamessawle/homebrew-tap). |
 
 A Hook only ever depends on `hook-bridge-sdk`. `hook-bridge-runner` has no
@@ -58,6 +63,11 @@ fuller, harness-free-tested Hooks you can copy.
 `hook-bridge-runner` is what each harness actually spawns; it in turn spawns
 your Hook. Point it at your Hook file with `--harness <claude-code|codex>`.
 
+Wire a Hook to `PreToolUse` for `tool.before`, or (on claude-code)
+`PostToolUse` for `tool.after` — same `hook-bridge-runner` invocation either
+way, since the runner reads the Hook's event straight off the native payload
+(ADR-0003).
+
 ### claude-code
 
 In `.claude/settings.json` (or `~/.claude/settings.json`):
@@ -72,6 +82,17 @@ In `.claude/settings.json` (or `~/.claude/settings.json`):
           {
             "type": "command",
             "command": "hook-bridge-runner --harness claude-code /path/to/guard.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "hook-bridge-runner --harness claude-code /path/to/audit.py"
           }
         ]
       }
@@ -97,11 +118,22 @@ Codex gates hook execution behind trust review (`/hooks`) and the
 `[features] hooks = true` flag — see codex's own docs if the hook doesn't
 appear to run.
 
-## Harness parity — known gap
+## Harness parity — known gaps
 
-`allow`/`deny` behave identically on both harnesses; `ask` currently does
-not — see [`packages/hook-bridge/`](packages/hook-bridge/) for the adapter
-details and the gap.
+For `tool.before`, Codex's input shape is compatible and `deny`/`defer` map
+faithfully. Its runtime rejects `permissionDecision: "allow"` without an input
+rewrite, so the Adapter maps `allow` to empty output: the hook passes, but
+Codex's normal permission flow still applies. Codex rejects `"ask"` entirely;
+the Adapter maps it to empty output too. Every generic Verdict therefore
+produces a valid Codex response, though `allow` loses auto-approval and `ask`
+loses guaranteed interactive confirmation: Codex prompts only when its normal
+permission policy requires it.
+
+For `tool.after`, Codex exposes native `PostToolUse`, but Bash
+`tool_response` is the output string alone and omits the exit status required
+by `ToolResult`. The runner therefore has no Codex `PostToolUse` Codec and
+fails loudly instead of inventing an `exit_code`. Output-rewrite
+(redacting/replacing a tool's result) is an unbuilt seam — see ADR-0004.
 
 ## Repo layout
 

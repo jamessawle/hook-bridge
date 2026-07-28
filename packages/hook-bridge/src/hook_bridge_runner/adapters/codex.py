@@ -1,15 +1,18 @@
 """The codex harness Adapter (#12).
 
-Codex's hook system was deliberately modelled on claude-code's — same
-`hook_event_name`/`tool_name`/`tool_input` field names on the way in, same
-`hookSpecificOutput.permissionDecision` shape on the way out. Confirmed live
-against codex-cli 0.145.0 (#13): codex's own embedded output JSON Schema
-marks `hookSpecificOutput.hookEventName` as **required** — omitting it makes
-the whole response schema-invalid, so codex silently discards the decision
-(logged as `hook: PreToolUse Failed`) and lets the command through regardless
-of `permissionDecision`. `ask` is parsed but not yet honoured by codex even
-with a schema-valid response (tracked in #18). See
-https://developers.openai.com/codex/hooks for the native protocol this codes.
+Codex's `PreToolUse` input maps cleanly to the generic `tool.before` Context,
+but its output semantics overlap only partly. `deny` maps to
+`permissionDecision: "deny"` and `defer` to empty output. Codex rejects
+`permissionDecision: "allow"` unless it accompanies an input rewrite, and
+still runs the normal permission flow afterward, so this Codec conservatively
+maps `allow` to empty output too: the command can proceed, but is not
+auto-approved. Codex also rejects `ask`, so the Codec maps that to empty
+output as well. This keeps the Codec total, but cannot guarantee a prompt:
+Codex applies its normal permission policy instead (tracked in #18).
+
+Codex requires `hookSpecificOutput.hookEventName` on the supported deny
+response. See https://developers.openai.com/codex/hooks for the native
+protocol this codes.
 """
 
 from __future__ import annotations
@@ -43,17 +46,18 @@ class _CodexToolBeforeCodec(Codec):
 
     def encode(self, verdict: dict[str, Any]) -> tuple[dict[str, Any], int]:
         outcome = verdict.get("outcome")
-        if outcome == "defer":
-            # No opinion: emit nothing so codex's normal permission flow
-            # decides, per #8's `defer` semantics.
+        if outcome in ("allow", "ask", "defer"):
+            # Codex cannot auto-approve from PreToolUse. Empty output lets the
+            # command continue through its normal permission flow: faithful
+            # for defer, but a lossy degradation for allow and ask. In
+            # particular, ask does not guarantee that Codex will prompt.
             return {}, 0
-        if outcome in ("allow", "deny", "ask"):
-            hook_specific_output: dict[str, Any] = {
+        if outcome == "deny":
+            hook_specific_output = {
                 "hookEventName": _NATIVE_EVENT,
-                "permissionDecision": outcome,
+                "permissionDecision": "deny",
+                "permissionDecisionReason": verdict.get("reason", ""),
             }
-            if outcome in ("deny", "ask"):
-                hook_specific_output["permissionDecisionReason"] = verdict.get("reason", "")
             return {"hookSpecificOutput": hook_specific_output}, 0
         raise RunnerError(f"codex codec cannot encode outcome {outcome!r}")
 

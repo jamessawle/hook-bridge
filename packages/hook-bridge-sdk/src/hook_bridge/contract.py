@@ -66,6 +66,24 @@ class ToolBeforeContext(Context):
     tool: Tool
 
 
+@dataclass(frozen=True)
+class ToolResult:
+    """A tool's completed result, as surfaced by `tool.after`. Generic and
+    normalised, never harness pass-through — same treatment as `Tool`."""
+
+    text: str
+    exit_code: int
+
+
+@dataclass(frozen=True)
+class ToolAfterContext(Context):
+    """The `tool.after` event: a tool has already run."""
+
+    event: ClassVar[str] = "tool.after"
+    tool: Tool
+    result: ToolResult
+
+
 # ---------------------------------------------------------------------------
 # Verdict — symmetric per-event discriminated union. Code written for `tool.before`
 # can only return a `ToolBeforeVerdict`, so event/verdict mismatches can't compile.
@@ -136,3 +154,57 @@ def ask(reason: str) -> ToolBeforeVerdict:
 def defer() -> ToolBeforeVerdict:
     """Express no opinion — the harness's normal permission flow decides."""
     return ToolBeforeVerdict("defer")
+
+
+# ---------------------------------------------------------------------------
+# `tool.after` Verdict (ADR-0004): a tool has already run, so permission
+# verbs (`allow`/`deny`/`ask`) have no meaning. Three verbs instead: `pass_`
+# (no opinion), `block` (stop the agent proceeding, with a reason),
+# `annotate` (inject context without blocking).
+# ---------------------------------------------------------------------------
+
+ToolAfterOutcome = Literal["pass", "block", "annotate"]
+
+
+@dataclass(frozen=True)
+class ToolAfterVerdict(Verdict):
+    """The Verdict for a `tool.after` event.
+
+    Three generic outcomes (v1): `pass_` (no opinion), `block` (stop the
+    agent from proceeding, with a mandatory reason) and `annotate` (inject
+    context for the agent without blocking, with mandatory content).
+    Rewriting the tool's own output is a documented, unbuilt seam (ADR-0004).
+
+    Construct these via the `pass_()` / `block()` / `annotate()` helpers
+    rather than directly.
+    """
+
+    outcome: ToolAfterOutcome
+    message: str | None = None
+
+    @property
+    def is_pass(self) -> bool:
+        return self.outcome == "pass"
+
+    @property
+    def is_block(self) -> bool:
+        return self.outcome == "block"
+
+    @property
+    def is_annotate(self) -> bool:
+        return self.outcome == "annotate"
+
+
+def pass_() -> ToolAfterVerdict:
+    """Express no opinion — nothing is surfaced to the harness."""
+    return ToolAfterVerdict("pass")
+
+
+def block(reason: str) -> ToolAfterVerdict:
+    """Stop the agent from proceeding. The reason is surfaced to the model/user."""
+    return ToolAfterVerdict("block", reason)
+
+
+def annotate(context: str) -> ToolAfterVerdict:
+    """Inject context for the agent, without blocking."""
+    return ToolAfterVerdict("annotate", context)

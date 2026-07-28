@@ -44,10 +44,16 @@ Runnable examples live in [`../../examples/`](../../examples/).
 - `@hook` decorator → `Hook[C, V]` with `.dispatch(ctx)` (pure test seam) and
   `.run()` (stdin JSON → dispatch → stdout JSON; exit code = health only).
 - `run(*hooks)` to compose several events in one file (dispatch by `ctx.event`).
-- Verdict helpers: `allow()`, `deny(reason)`, `ask(reason)`, `defer()`.
+- `tool.before` Verdict helpers: `allow()`, `deny(reason)`, `ask(reason)`,
+  `defer()`.
+- `tool.after` Verdict helpers: `pass_()`, `block(message)`,
+  `annotate(message)` (ADR-0004 — distinct from `tool.before`'s verbs, since
+  the tool has already run by the time this event fires).
 - Contract types: `ToolBeforeContext` (`.tool` discriminated on `.kind`; `shell`
   → `.command`) and `ToolBeforeVerdict` (`is_allow` / `is_deny` / `is_ask` /
-  `is_defer` / `reason`).
+  `is_defer` / `reason`); `ToolAfterContext` (adds `.result` — `.text` /
+  `.exit_code`) and `ToolAfterVerdict` (`is_pass` / `is_block` /
+  `is_annotate` / `message`).
 - Boundary schema validation on the Context read and Verdict written
   (`BoundaryError`).
-- Testing factories: `tool_before`, `shell`.
+- Testing factories: `tool_before`, `tool_after`, `shell`, `result`.
