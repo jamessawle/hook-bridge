@@ -6,11 +6,14 @@ translates each harness's native hook protocol to and from that contract, so
 the same Hook file runs unchanged on multiple harnesses and can be tested
 with no harness present at all.
 
-Today it supports two harnesses — [claude-code](https://code.claude.com/docs/en/hooks.md)
-and [codex](https://developers.openai.com/codex/hooks) — for two events:
-`tool.before` (block/allow/ask a tool call before it runs, e.g. a shell
-command) and `tool.after` (block further processing or annotate once a tool
-call has already run).
+Today [claude-code](https://code.claude.com/docs/en/hooks.md) supports the full
+`tool.before` and `tool.after` Contracts. The
+[codex](https://developers.openai.com/codex/hooks) Adapter accepts and encodes
+all four `tool.before` outcomes: `deny` blocks, while
+`allow`, `ask`, and `defer` produce empty output and continue through Codex's
+normal permission flow. In particular, `ask` cannot force Codex to prompt.
+Codex's native `PostToolUse` also omits the exit status required by the generic
+`tool.after` result Contract.
 
 A few terms recur throughout this repo: a **Harness** is the agent host that
 fires hook events (claude-code, codex); a **Hook** is the user-authored logic
@@ -60,9 +63,10 @@ fuller, harness-free-tested Hooks you can copy.
 `hook-bridge-runner` is what each harness actually spawns; it in turn spawns
 your Hook. Point it at your Hook file with `--harness <claude-code|codex>`.
 
-Wire a Hook to `PreToolUse` for `tool.before`, or `PostToolUse` for
-`tool.after` — same `hook-bridge-runner` invocation either way, since the
-runner reads the Hook's event straight off the native payload (ADR-0003).
+Wire a Hook to `PreToolUse` for `tool.before`, or (on claude-code)
+`PostToolUse` for `tool.after` — same `hook-bridge-runner` invocation either
+way, since the runner reads the Hook's event straight off the native payload
+(ADR-0003).
 
 ### claude-code
 
@@ -108,13 +112,6 @@ matcher = "^Bash$"
 [[hooks.PreToolUse.hooks]]
 type = "command"
 command = "hook-bridge-runner --harness codex /path/to/guard.py"
-
-[[hooks.PostToolUse]]
-matcher = "^Bash$"
-
-[[hooks.PostToolUse.hooks]]
-type = "command"
-command = "hook-bridge-runner --harness codex /path/to/audit.py"
 ```
 
 Codex gates hook execution behind trust review (`/hooks`) and the
@@ -123,13 +120,20 @@ appear to run.
 
 ## Harness parity — known gaps
 
-`allow`/`deny` behave identically on both harnesses; `ask` currently does
-not — see [`packages/hook-bridge/`](packages/hook-bridge/) for the adapter
-details and the gap. For `tool.after`, codex's exact `tool_response` shape
-for a Bash result isn't precisely documented; the codex Adapter assumes the
-same `{text, exitCode}` shape claude-code documents, pending live
-verification (see `adapters/codex.py`). Output-rewrite (redacting/replacing
-a tool's result) is an unbuilt seam on both harnesses — see ADR-0004.
+For `tool.before`, Codex's input shape is compatible and `deny`/`defer` map
+faithfully. Its runtime rejects `permissionDecision: "allow"` without an input
+rewrite, so the Adapter maps `allow` to empty output: the hook passes, but
+Codex's normal permission flow still applies. Codex rejects `"ask"` entirely;
+the Adapter maps it to empty output too. Every generic Verdict therefore
+produces a valid Codex response, though `allow` loses auto-approval and `ask`
+loses guaranteed interactive confirmation: Codex prompts only when its normal
+permission policy requires it.
+
+For `tool.after`, Codex exposes native `PostToolUse`, but Bash
+`tool_response` is the output string alone and omits the exit status required
+by `ToolResult`. The runner therefore has no Codex `PostToolUse` Codec and
+fails loudly instead of inventing an `exit_code`. Output-rewrite
+(redacting/replacing a tool's result) is an unbuilt seam — see ADR-0004.
 
 ## Repo layout
 

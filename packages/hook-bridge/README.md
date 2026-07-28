@@ -29,16 +29,15 @@ Two real harness Adapters ship today, both proven end-to-end against a live
   `PostToolUse` (`tool.after`): `pass_` emits nothing, `block` maps to
   `decision: "block"` + `reason`, `annotate` maps to
   `hookSpecificOutput.additionalContext`.
-- **codex** — `--harness codex`. Same `PreToolUse`/`PostToolUse` shapes and
-  encoding as claude-code, with one required extra field: codex's own output
-  JSON Schema marks `hookSpecificOutput.hookEventName` as required, so the
-  codex Codec always includes it (omitting it makes codex silently discard
-  the decision and let the command through). **Known gaps:** codex parses
-  `ask` but does not yet act on it — a Hook returning `ask()` blocks on
-  claude-code but runs unconfirmed on codex. For `PostToolUse`, codex's exact
-  `tool_response` shape for a Bash result isn't precisely documented; the
-  codex Codec assumes the same `{text, exitCode}` shape claude-code
-  documents, pending live verification.
+- **codex** — `--harness codex`. Handles `PreToolUse` input and faithfully
+  encodes `deny`/`defer`. Codex rejects `permissionDecision: "allow"` without
+  an input rewrite, so the Codec maps `allow` to empty output: the hook passes,
+  but Codex's normal permission flow still applies. Codex rejects `ask`, so
+  the Codec maps it to empty output too. Every generic Verdict therefore has
+  valid Codex output, but `ask` cannot guarantee confirmation: Codex prompts
+  only when its normal permission policy requires it. Native `PostToolUse` is
+  still unsupported: its Bash `tool_response` is an output string with no exit
+  status, so it cannot faithfully populate the generic `ToolResult`.
 
 A `stub` Adapter also ships; it exists only to exercise the CLI/IO plumbing in
 tests and is not a real harness.
