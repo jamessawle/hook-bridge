@@ -1,0 +1,118 @@
+README.md
+  s_74f13395cb2ba0::t_6fb37b1d810cc7 30,70,88-98,121
+  s_0a0887f341c421::t_6b8023452120ec 9-16,66-69,123-136
+  s_2eaa6e2621d119::t_3240f60b74d0fd 142
+docs/adr/0004-tool-after-verdict-verbs.md
+  s_74f13395cb2ba0::t_60e9398bcef7ba 1-76
+packages/hook-bridge-sdk/README.md
+  s_74f13395cb2ba0::t_9fd7dc12019fb4 47-51,54-56,59
+packages/hook-bridge-sdk/src/hook_bridge/__init__.py
+  s_74f13395cb2ba0::t_631939cf673031 14-15,18,21,23,26,28,37,42-45,50-51,55,62,64
+packages/hook-bridge-sdk/src/hook_bridge/contract.py
+  s_74f13395cb2ba0::t_871b8b330e8fda 69-86,157-210
+packages/hook-bridge-sdk/src/hook_bridge/factories.py
+  s_74f13395cb2ba0::t_60010f9469cd9c 11,19-23,33-45
+packages/hook-bridge-sdk/src/hook_bridge/wire.py
+  s_74f13395cb2ba0::t_c0ce318c4aa556 25-27,31,64-72,84-85,96-103,113-119,129-130,142-151
+packages/hook-bridge-sdk/tests/test_contract.py
+  s_74f13395cb2ba0::t_13a99a60063b54 7-8,12,14,17-18,20,82-136
+packages/hook-bridge-sdk/tests/test_wire.py
+  s_74f13395cb2ba0::t_e41fae7f4e6e13 11-12,16,18,23,55,110-167
+packages/hook-bridge/README.md
+  s_74f13395cb2ba0::t_dfdde7d7c1030b 28-31
+  s_d9dd2079f8fe93::t_97d42da35c8548 32-40
+  s_2eaa6e2621d119::t_b86e09af62d073 45-66
+packages/hook-bridge/tests/adapters/codex/test_tool_before.py
+  s_0a0887f341c421::t_2740a3c25f5543 13,15,17-18,20,60
+  s_2a5325c851639a::t_54eaf520fee2e8 1,8,25-27,59,75,79-80
+docs/adr/0005-pluggable-codec-modules.md
+  s_2eaa6e2621d119::t_688cf08d799890 1-87
+packages/hook-bridge/src/hook_bridge_runner/adapters/claude_code/__init__.py
+  s_2a5325c851639a::t_cfe7874af7284e 1-7
+packages/hook-bridge/src/hook_bridge_runner/adapters/claude_code/adapter.py
+  s_2a5325c851639a::t_ad143093b2484e 1-23
+packages/hook-bridge/src/hook_bridge_runner/adapters/claude_code/common.py
+  s_2a5325c851639a::t_6c891ecf22721c 1-55
+packages/hook-bridge/src/hook_bridge_runner/adapters/claude_code/tool_after.py
+  s_2a5325c851639a::t_8f857b124520f1 1-53
+packages/hook-bridge/src/hook_bridge_runner/adapters/claude_code/tool_before.py
+  s_2a5325c851639a::t_329d9d69508b96 1,7-8,11-13,16-22,30,34-36,41
+packages/hook-bridge/src/hook_bridge_runner/adapters/codex/__init__.py
+  s_2a5325c851639a::t_157734cc499d23 1-7
+packages/hook-bridge/src/hook_bridge_runner/adapters/codex/adapter.py
+  s_2a5325c851639a::t_cf3ecd89b33059 1-22
+packages/hook-bridge/src/hook_bridge_runner/adapters/codex/tool_before.py
+  s_2a5325c851639a::t_85376835cf3bac 1,7,12-15,18-21,25-27,29,32,41,48-60,69
+packages/hook-bridge/src/hook_bridge_runner/adapters/stub/__init__.py
+  s_2a5325c851639a::t_9d7c4672bdc1c4 1-7
+packages/hook-bridge/src/hook_bridge_runner/adapters/stub/adapter.py
+  s_2a5325c851639a::t_25574cec5f61d0 1-22
+packages/hook-bridge/src/hook_bridge_runner/adapters/stub/tool_before.py
+  s_2a5325c851639a::t_c196c0dac168e0 1,7-8,10-12,19,32-35,39
+packages/hook-bridge/src/hook_bridge_runner/cli.py
+  s_2eaa6e2621d119::t_bdf224b66ebdcc 43
+packages/hook-bridge/src/hook_bridge_runner/codec.py
+  s_2a5325c851639a::t_188090bef8b343 1,4-6,17,22-26,31-32,34-39,42-60,62-75
+packages/hook-bridge/tests/adapters/claude_code/test_adapter.py
+  s_2a5325c851639a::t_17ce0ca5601900 1-34
+packages/hook-bridge/tests/adapters/claude_code/test_tool_after.py
+  s_2a5325c851639a::t_79d5b770cf8866 1-88
+packages/hook-bridge/tests/adapters/claude_code/test_tool_before.py
+  s_2a5325c851639a::t_b6eda36dfbb4a4 1,8,20-22,54,58-63,97-98
+packages/hook-bridge/tests/adapters/codex/test_adapter.py
+  s_2a5325c851639a::t_18e9df7000507f 1-25
+packages/hook-bridge/tests/adapters/stub/test_adapter.py
+  s_2a5325c851639a::t_682ea9f7513c56 1-22
+packages/hook-bridge/tests/adapters/stub/test_tool_before.py
+  s_2a5325c851639a::t_ddc5b58d41136d 1,6,10-12,17-22,42-49,52
+packages/hook-bridge/tests/test_codec.py
+  s_2a5325c851639a::t_27fc0ecb927f8e 1-71
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "45a77248292c562f7ace7610dc937813f64cb926",
+  "prompts": {},
+  "sessions": {
+    "s_0a0887f341c421": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faa41-b79a-7f52-b275-64db7b4bc18a",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    },
+    "s_2a5325c851639a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faa6a-9828-78c0-b7a3-0664e82aba0c",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    },
+    "s_2eaa6e2621d119": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faaca-34fc-7103-8b41-d8ae9e53212f",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    },
+    "s_74f13395cb2ba0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1ffd6664-dea5-4cb4-9934-471258facefe",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    },
+    "s_d9dd2079f8fe93": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faa45-c708-7d43-94da-02a56cb28aaa",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
