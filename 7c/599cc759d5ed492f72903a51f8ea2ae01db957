@@ -1,0 +1,27 @@
+README.md
+  s_95ae6bf44ea1f3::t_7ba1a90c0e37bd 55-68
+.github/workflows/ci.yml
+  s_95ae6bf44ea1f3::t_f7365f946f2f51 11,13-14,16-30
+mise.toml
+  s_95ae6bf44ea1f3::t_721ec30efa994a 1-31
+AGENTS.md
+  s_95ae6bf44ea1f3::t_fdaa517e9eeb73 1-8
+.github/pull_request_template.md
+  s_95ae6bf44ea1f3::t_300f05e7db7a05 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "7c599cc759d5ed492f72903a51f8ea2ae01db957",
+  "prompts": {},
+  "sessions": {
+    "s_95ae6bf44ea1f3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faae5-df5f-7f20-b970-eebf0e82288d",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
