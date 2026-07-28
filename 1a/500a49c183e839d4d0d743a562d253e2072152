@@ -1,0 +1,33 @@
+packages/hook-bridge/README.md
+  s_d9dd2079f8fe93::t_97d42da35c8548 32-40
+packages/hook-bridge/src/hook_bridge_runner/adapters/codex.py
+  s_d9dd2079f8fe93::t_9b39fabc1a1809 1-15,49-53,55,57-59,70,77,79,84
+README.md
+  s_0a0887f341c421::t_6b8023452120ec 9-16,66-69,123-136
+packages/hook-bridge/tests/test_codex_adapter.py
+  s_0a0887f341c421::t_2740a3c25f5543 14,16,18-19,21,69-70,87,92-93,106-111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "1a500a49c183e839d4d0d743a562d253e2072152",
+  "prompts": {},
+  "sessions": {
+    "s_0a0887f341c421": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faa41-b79a-7f52-b275-64db7b4bc18a",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    },
+    "s_d9dd2079f8fe93": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019faa45-c708-7d43-94da-02a56cb28aaa",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
