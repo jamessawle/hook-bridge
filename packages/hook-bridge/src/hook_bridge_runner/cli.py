@@ -2,7 +2,8 @@
 
 `hook-bridge --harness <h> <hook>` reads the harness's native event off
 stdin, selects the `Codec` for `(harness, native event)` by peeking that
-event name (#8, #11 — see docs/adr/0003-runner-process-boundary.md),
+event name (#8, #11 — see
+docs/adr/0003-hooks-communicate-across-a-language-neutral-subprocess-boundary.md),
 `decode`s to the generic wire Context, runs the Hook as a subprocess, and
 `encode`s the Hook's generic wire Verdict back into the harness's native
 response + exit code.
@@ -40,10 +41,7 @@ def _bridge(harness: str, hook_path: str, raw: dict[str, Any]) -> tuple[dict[str
     adapter = ADAPTERS.get(harness)
     if adapter is None:
         raise RunnerError(f"unknown harness {harness!r}")
-    native_event = adapter.native_event(raw)
-    codec = adapter.codecs.get(native_event)
-    if codec is None:
-        raise RunnerError(f"harness {harness!r} has no codec for event {native_event!r}")
+    codec = adapter.codec_for(raw)
     context = codec.decode(raw)
     verdict = run_hook_process(hook_path, context)
     return codec.encode(verdict)

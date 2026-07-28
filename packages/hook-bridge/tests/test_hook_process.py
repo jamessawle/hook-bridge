@@ -1,6 +1,6 @@
 """Unit tests on the Hook-subprocess boundary: a real `uv run` of small
 dependency-free fixture scripts, exercising the health/exit-code contract
-ADR-0001 and hook.py's `_run_io` already establish."""
+ADR-0003 and hook.py's `_run_io` already establish."""
 
 from __future__ import annotations
 

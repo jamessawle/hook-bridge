@@ -66,7 +66,8 @@ your Hook. Point it at your Hook file with `--harness <claude-code|codex>`.
 Wire a Hook to `PreToolUse` for `tool.before`, or (on claude-code)
 `PostToolUse` for `tool.after` — same `hook-bridge-runner` invocation either
 way, since the runner reads the Hook's event straight off the native payload
-(ADR-0003).
+(see [ADR-0003](docs/adr/0003-hooks-communicate-across-a-language-neutral-subprocess-boundary.md)
+for the language-neutral subprocess boundary).
 
 ### claude-code
 
@@ -133,13 +134,13 @@ For `tool.after`, Codex exposes native `PostToolUse`, but Bash
 `tool_response` is the output string alone and omits the exit status required
 by `ToolResult`. The runner therefore has no Codex `PostToolUse` Codec and
 fails loudly instead of inventing an `exit_code`. Output-rewrite
-(redacting/replacing a tool's result) is an unbuilt seam — see ADR-0004.
+(redacting/replacing a tool's result) is an unbuilt seam.
 
 ## Repo layout
 
 ```
 packages/hook-bridge-sdk/   the authoring SDK (write Hooks against this)
-packages/hook-bridge/       the runner CLI (hook-bridge-runner)
+packages/hook-bridge/       the runner CLI and per-Harness Codec modules
 examples/                   runnable, harness-free-tested example Hooks
 docs/adr/                   architecture decision records
 ```

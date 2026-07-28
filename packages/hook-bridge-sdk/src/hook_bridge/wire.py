@@ -1,6 +1,6 @@
 """Boundary schema validation for the generic wire Contract.
 
-Per ADR-0001, the Contract crosses a process edge as JSON, so the seam is
+Per ADR-0003, the Contract crosses a process edge as JSON, so the seam is
 stringly-typed. This module is the loud gate on that seam: it validates the
 generic Context read from stdin and the generic Verdict written to stdout,
 failing with a `BoundaryError` rather than passing garbage into (or out of) a
@@ -37,7 +37,7 @@ class BoundaryError(Exception):
     """A payload crossing the wire boundary did not match the Contract.
 
     Raised on a malformed Context read from stdin or an un-encodable Verdict —
-    the loud failure ADR-0001 mandates, never a silent pass-through.
+    the loud failure ADR-0003 mandates, never a silent pass-through.
     """
 
 

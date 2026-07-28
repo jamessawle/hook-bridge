@@ -42,8 +42,29 @@ Two real harness Adapters ship today, both proven end-to-end against a live
 A `stub` Adapter also ships; it exists only to exercise the CLI/IO plumbing in
 tests and is not a real harness.
 
-Adding a harness or event only ever touches its own Adapter module —
-`cli.py` is unchanged.
+## Adding a Codec
+
+Each Harness is an Adapter package, and each supported hook type has its own
+self-describing Codec module:
+
+```text
+adapters/
+  claude_code/
+    adapter.py       # explicit composition root
+    common.py        # decoding shared by this Harness's Codecs
+    tool_before.py   # PreToolUse <-> tool.before
+    tool_after.py    # PostToolUse <-> tool.after
+  codex/
+    adapter.py
+    tool_before.py
+```
+
+A Codec declares its `native_event` and `contract_event` and implements the
+pure `decode`/`encode` pair. Add it to the Harness's `adapter.py` composition
+list; `HarnessAdapter` validates and indexes it. No existing Codec module,
+`cli.py`, or `hook_process.py` changes when a Harness gains support for an
+existing Contract event. See
+[ADR-0005](../../docs/adr/0005-harness-event-translations-are-independent-explicitly-composed-units.md).
 
 Dependency-free by design — the runner works in plain JSON-shaped dicts,
 never the SDK's typed `Context`/`Verdict`.

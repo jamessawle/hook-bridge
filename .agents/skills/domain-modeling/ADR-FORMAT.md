@@ -26,15 +26,21 @@ Only include these when they add genuine value. Most ADRs won't need them.
 
 Scan `docs/adr/` for the highest existing number and increment by one.
 
+Accepted ADRs are append-only. When an architectural decision changes, create a
+new ADR that names the record it supersedes; do not rewrite the accepted record.
+Git history remains the archive for records removed during an explicitly agreed
+one-off reset.
+
 ## When to offer an ADR
 
-All three of these must be true:
+All four of these must be true:
 
 1. **Hard to reverse** — the cost of changing your mind later is meaningful
 2. **Surprising without context** — a future reader will look at the code and wonder "why on earth did they do it this way?"
 3. **The result of a real trade-off** — there were genuine alternatives and you picked one for specific reasons
+4. **A durable, cross-cutting architectural constraint** — it guides a family of present or future implementations while leaving instance-level choices to implementation time
 
-If a decision is easy to reverse, skip it — you'll just reverse it. If it's not surprising, nobody will wonder why. If there was no real alternative, there's nothing to record beyond "we did the obvious thing."
+If a decision is easy to reverse, skip it — you'll just reverse it. If it's not surprising, nobody will wonder why. If there was no real alternative, there's nothing to record beyond "we did the obvious thing." If it fixes only one implementation instance, keep it with that implementation rather than promoting it to architecture.
 
 ### What qualifies
 
@@ -45,3 +51,11 @@ If a decision is easy to reverse, skip it — you'll just reverse it. If it's no
 - **Deliberate deviations from the obvious path.** "We're using manual SQL instead of an ORM because X." Anything where a reasonable reader would assume the opposite. These stop the next engineer from "fixing" something that was deliberate.
 - **Constraints not visible in the code.** "We can't use AWS because of compliance requirements." "Response times must be under 200ms because of the partner API contract."
 - **Rejected alternatives when the rejection is non-obvious.** If you considered GraphQL and picked REST for subtle reasons, record it — otherwise someone will suggest GraphQL again in six months.
+
+### What does not qualify
+
+- Command-specific APIs or complete field shapes.
+- Individual event, Verdict, helper, class, or function names.
+- Python file and module layouts.
+- Control-flow walkthroughs and mappings for one Harness/event capability cell.
+- Any other instance-level detail that does not constrain a family of implementations.
