@@ -2,7 +2,5 @@
 
 ## Checklist
 
-- [ ] `uv run ruff check .` passes
-- [ ] `uv run pyright` passes
-- [ ] `uv run pytest` passes
+- [ ] `mise run validate` passes
 - [ ] Tests added/updated for the change, where applicable

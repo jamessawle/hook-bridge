@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#MISE description="Manage the Docker Sandbox"
+#MISE raw=true
+#USAGE arg "[action]" help="Sandbox action" default="attach" {
+#USAGE   choices "attach" "rebuild"
+#USAGE }
+set -euo pipefail
+
+exec bash "$MISE_PROJECT_ROOT/.docker-sbx/sandbox.sh" "$usage_action"
