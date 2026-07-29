@@ -29,3 +29,11 @@ hide = true
 description = "Run the test suite"
 run = "uv run --locked pytest"
 hide = true
+
+[tasks.prototype-tool-after-filter]
+description = "Run the throwaway tool.after filtering model"
+run = "uv run --locked python packages/hook-bridge-sdk/prototypes/tool_after_filter_model.py"
+
+[tasks.prototype-tool-after-payload]
+description = "Compare throwaway tool.after terminal-payload models"
+run = "uv run --locked python packages/hook-bridge-sdk/prototypes/tool_after_payload_model.py"
