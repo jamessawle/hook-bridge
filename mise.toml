@@ -29,3 +29,7 @@ hide = true
 description = "Run the test suite"
 run = "uv run --locked pytest"
 hide = true
+
+[tasks.prototype-annotation-filtering]
+description = "Drive the throwaway annotation-driven Hook filtering prototype"
+run = "uv run --project packages/hook-bridge-sdk python packages/hook-bridge-sdk/prototype_annotation_filtering/tui.py"
