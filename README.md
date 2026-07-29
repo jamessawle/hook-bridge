@@ -68,8 +68,9 @@ Python packages and development dependencies remain declared in
 
 ### Sandbox development
 
-Docker Sandbox is the optional isolated path for agent development. The
-configuration is tested with sbx 0.35.0.
+Docker Sandbox is the optional isolated path for Codex development. The
+project supports other harnesses, but this sandbox configuration is Codex-only
+and is tested with sbx 0.35.0.
 
 On a new machine, authenticate Docker, GitHub, and Codex, then choose a
 host-global network policy:

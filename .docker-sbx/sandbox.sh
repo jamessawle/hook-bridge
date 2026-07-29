@@ -4,7 +4,6 @@ set -euo pipefail
 
 repository_root=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
 sandbox_name=${SANDBOX_NAME:-hook-bridge}
-sandbox_agent=${SANDBOX_AGENT:-codex}
 sbx_kits_base='git+https://github.com/jamessawle/sbx-kits.git#ref=v0.2.0'
 kits=(
 	'git+https://github.com/docker/sbx-kits-contrib.git#ref=v0.12.0&dir=mise'
@@ -57,14 +56,11 @@ rebuild)
 		create_args+=(--kit "$kit")
 	done
 	DOCKER_SANDBOXES_KIT_ALLOWED_SOURCES=$kit_sources \
-		"${create_args[@]}" "$sandbox_agent" "$repository_root"
+		"${create_args[@]}" codex "$repository_root"
 	setup_repository
 	;;
-validate)
-	validate_kits
-	;;
 *)
-	echo "usage: $0 <attach|rebuild|validate>" >&2
+	echo "usage: $0 <attach|rebuild>" >&2
 	exit 2
 	;;
 esac

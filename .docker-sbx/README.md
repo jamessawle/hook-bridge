@@ -13,14 +13,13 @@ the Linux virtual environment does not replace the host's macOS `.venv`.
 | --------------------------- | ---------------------------------------------- |
 | `mise run sandbox`          | Refresh repository dependencies and attach     |
 | `mise run sandbox rebuild`  | Replace the sandbox and apply the current kits |
-| `mise run sandbox validate` | Validate every configured kit                  |
 
-The defaults use Codex and the sandbox name `hook-bridge`. Override them when
-needed:
+The sandbox uses Codex and defaults to the name `hook-bridge`. Override the
+sandbox name when needed:
 
 ```sh
-SANDBOX_AGENT=claude SANDBOX_NAME=hook-bridge-claude mise run sandbox rebuild
-SANDBOX_NAME=hook-bridge-claude mise run sandbox
+SANDBOX_NAME=hook-bridge-alt mise run sandbox rebuild
+SANDBOX_NAME=hook-bridge-alt mise run sandbox
 ```
 
 Network policy is host-global and may affect unrelated sandboxes, so the Mise

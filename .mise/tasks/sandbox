@@ -2,7 +2,7 @@
 #MISE description="Manage the Docker Sandbox"
 #MISE raw=true
 #USAGE arg "[action]" help="Sandbox action" default="attach" {
-#USAGE   choices "attach" "rebuild" "validate"
+#USAGE   choices "attach" "rebuild"
 #USAGE }
 set -euo pipefail
 
