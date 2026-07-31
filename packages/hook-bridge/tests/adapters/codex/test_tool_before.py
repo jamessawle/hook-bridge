@@ -22,18 +22,54 @@ _PRE_TOOL_USE = {
 }
 
 
+def _tool(raw: dict[str, Any], projection: dict[str, Any] | None) -> dict[str, Any]:
+    return {
+        "harness": "codex",
+        "native": raw,
+        "projection": projection,
+    }
+
+
 def test_declares_its_native_and_contract_events() -> None:
     assert codec.native_event == "PreToolUse"
     assert codec.contract_event == "tool.before"
 
 
-def test_decode_builds_the_generic_wire_context() -> None:
+def test_decode_preserves_native_data_and_projects_bash() -> None:
     assert codec.decode(_PRE_TOOL_USE) == {
         "event": "tool.before",
         "session_id": "s1",
         "cwd": "/repo",
-        "tool": {"kind": "shell", "command": "git status"},
+        "tool": _tool(
+            _PRE_TOOL_USE,
+            {"kind": "shell", "command": "git status"},
+        ),
     }
+
+
+@pytest.mark.parametrize(
+    "tool",
+    [
+        {"tool_name": "apply_patch", "tool_input": {"command": "*** Begin Patch"}},
+        {"tool_name": "update_plan", "tool_input": {"plan": []}},
+        {"tool_name": "mcp__server__remote", "tool_input": {"value": 1}},
+        {"tool_name": "FutureBuiltIn", "tool_input": {"future": True}},
+        {"tool_name": "dynamic_tool", "tool_input": "unparsed arguments"},
+    ],
+    ids=["apply-patch", "local-function", "mcp", "unknown", "raw-input"],
+)
+def test_decode_preserves_every_tool_without_inventing_a_projection(
+    tool: dict[str, Any],
+) -> None:
+    raw = {**_PRE_TOOL_USE, **tool}
+    decoded = codec.decode(raw)
+    assert decoded["tool"] == _tool(raw, None)
+
+
+def test_decode_suppresses_shell_projection_when_required_field_drifted() -> None:
+    raw = {**_PRE_TOOL_USE, "tool_input": {"cmd": "git status"}}
+    decoded = codec.decode(raw)
+    assert decoded["tool"] == _tool(raw, None)
 
 
 def test_decode_requires_session_id_and_cwd() -> None:
@@ -46,14 +82,17 @@ def test_decode_rejects_a_misrouted_event() -> None:
         codec.decode({**_PRE_TOOL_USE, "hook_event_name": "PostToolUse"})
 
 
-def test_decode_rejects_an_unsupported_tool() -> None:
+@pytest.mark.parametrize("field", ["tool_name", "tool_input", "tool_use_id"])
+def test_decode_requires_the_native_tool_envelope(field: str) -> None:
+    raw = dict(_PRE_TOOL_USE)
+    raw.pop(field)
     with pytest.raises(RunnerError):
-        codec.decode({**_PRE_TOOL_USE, "tool_name": "apply_patch"})
+        codec.decode(raw)
 
 
-def test_decode_requires_the_command_field() -> None:
-    with pytest.raises(RunnerError):
-        codec.decode({**_PRE_TOOL_USE, "tool_input": {}})
+def test_decode_rejects_non_json_native_data() -> None:
+    with pytest.raises(RunnerError, match="must be JSON"):
+        codec.decode({**_PRE_TOOL_USE, "future": object()})
 
 
 _OUTCOMES: list[tuple[dict[str, str], tuple[dict[str, Any], int]]] = [

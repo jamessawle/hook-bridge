@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any
 
 from ...codec import HarnessAdapter, RunnerError
+from .tool_after import codec as tool_after_codec
 from .tool_before import codec as tool_before_codec
 
 
@@ -18,5 +19,5 @@ def _read_native_event(raw: dict[str, Any]) -> str:
 codex_adapter = HarnessAdapter(
     name="codex",
     read_native_event=_read_native_event,
-    codecs=[tool_before_codec],
+    codecs=[tool_before_codec, tool_after_codec],
 )
