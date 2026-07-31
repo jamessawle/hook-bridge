@@ -12,6 +12,8 @@ from hook_bridge import (
     ToolAfterVerdict,
     ToolBeforeContext,
     ToolBeforeVerdict,
+    ToolError,
+    ToolResult,
     allow,
     annotate,
     ask,
@@ -31,7 +33,11 @@ def _valid_context() -> dict[str, Any]:
         "event": "tool.before",
         "session_id": "s",
         "cwd": "/repo",
-        "tool": {"kind": "shell", "command": "git status"},
+        "tool": {
+            "harness": "codex",
+            "native": {"tool_name": "shell", "tool_input": {"command": "git status"}},
+            "projection": {"kind": "shell", "command": "git status"},
+        },
     }
 
 
@@ -43,8 +49,10 @@ def test_decode_builds_typed_context() -> None:
     assert isinstance(ctx, ToolBeforeContext)
     assert ctx.session_id == "s"
     assert ctx.cwd == "/repo"
-    assert ctx.tool.kind == "shell"
-    assert ctx.tool.command == "git status"
+    assert ctx.tool.harness.name == "codex"
+    assert ctx.tool.native.data["tool_name"] == "shell"
+    assert ctx.tool.projection is not None
+    assert ctx.tool.projection.command == "git status"
 
 
 _MALFORMED: list[tuple[str, Mutation]] = [
@@ -53,10 +61,13 @@ _MALFORMED: list[tuple[str, Mutation]] = [
     ("missing-cwd", lambda d: d.pop("cwd")),
     ("missing-tool", lambda d: d.pop("tool")),
     ("unknown-event", lambda d: d.update(event="tool.other")),
-    ("unknown-tool-kind", lambda d: d["tool"].update(kind="python")),
-    ("missing-command", lambda d: d["tool"].pop("command")),
+    ("unknown-harness", lambda d: d["tool"].update(harness="other")),
+    ("missing-native", lambda d: d["tool"].pop("native")),
+    ("unknown-projection-kind", lambda d: d["tool"]["projection"].update(kind="python")),
+    ("missing-command", lambda d: d["tool"]["projection"].pop("command")),
     ("non-string-session_id", lambda d: d.update(session_id=123)),
-    ("non-string-command", lambda d: d["tool"].update(command=None)),
+    ("non-string-command", lambda d: d["tool"]["projection"].update(command=None)),
+    ("non-json-native", lambda d: d["tool"].update(native={"bad": object()})),
 ]
 
 
@@ -117,25 +128,37 @@ def _valid_tool_after_context() -> dict[str, Any]:
         "event": "tool.after",
         "session_id": "s",
         "cwd": "/repo",
-        "tool": {"kind": "shell", "command": "git status"},
-        "result": {"text": "clean", "exit_code": 0},
+        "tool": {
+            "harness": "claude-code",
+            "native": {
+                "hook_event_name": "PostToolUse",
+                "tool_name": "Bash",
+                "tool_input": {"command": "git status"},
+                "tool_response": {"output": "clean", "exitCode": 0},
+            },
+            "projection": {"kind": "shell", "command": "git status"},
+        },
+        "observation": {
+            "kind": "result",
+            "output": {"output": "clean", "exitCode": 0},
+        },
     }
 
 
 def test_decode_builds_typed_tool_after_context() -> None:
     ctx = decode_context(_valid_tool_after_context())
     assert isinstance(ctx, ToolAfterContext)
-    assert ctx.tool.command == "git status"
-    assert ctx.result.text == "clean"
-    assert ctx.result.exit_code == 0
+    assert ctx.tool.projection is not None
+    assert ctx.tool.projection.command == "git status"
+    assert isinstance(ctx.observation, ToolResult)
+    assert ctx.observation.output == {"output": "clean", "exitCode": 0}
 
 
 _MALFORMED_TOOL_AFTER: list[tuple[str, Mutation]] = [
-    ("missing-result", lambda d: d.pop("result")),
-    ("missing-result-text", lambda d: d["result"].pop("text")),
-    ("missing-result-exit_code", lambda d: d["result"].pop("exit_code")),
-    ("non-int-exit_code", lambda d: d["result"].update(exit_code="0")),
-    ("bool-exit_code", lambda d: d["result"].update(exit_code=True)),
+    ("missing-observation", lambda d: d.pop("observation")),
+    ("missing-output", lambda d: d["observation"].pop("output")),
+    ("unknown-observation-kind", lambda d: d["observation"].update(kind="maybe")),
+    ("non-json-output", lambda d: d["observation"].update(output=object())),
 ]
 
 
@@ -147,6 +170,24 @@ def test_decode_rejects_malformed_tool_after_context(mutate: Mutation) -> None:
     mutate(raw)
     with pytest.raises(BoundaryError):
         decode_context(raw)
+
+
+def test_decode_builds_tool_error_with_any_json_value() -> None:
+    raw = _valid_tool_after_context()
+    raw["observation"] = {"kind": "error", "error": ["denied", {"code": 13}]}
+    ctx = decode_context(raw)
+    assert isinstance(ctx, ToolAfterContext)
+    assert isinstance(ctx.observation, ToolError)
+    assert ctx.observation.error == ["denied", {"code": 13}]
+
+
+def test_decode_accepts_absent_projection_without_losing_native_tool() -> None:
+    raw = _valid_context()
+    raw["tool"]["projection"] = None
+    ctx = decode_context(raw)
+    assert isinstance(ctx, ToolBeforeContext)
+    assert ctx.tool.projection is None
+    assert ctx.tool.native.data["tool_name"] == "shell"
 
 
 def test_encode_pass() -> None:

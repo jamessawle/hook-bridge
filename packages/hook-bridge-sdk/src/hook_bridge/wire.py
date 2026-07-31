@@ -10,24 +10,31 @@ This is the *generic* wire — the neutral Contract JSON, not any harness's nati
 protocol. Translating a harness's native shape to and from this wire is the
 Adapter's job (a separate concern in the runner), never the Hook's or the SDK's.
 
-Validation is hand-rolled and dependency-free on purpose: the v1 slice is small
-(one event, one tool kind, four verdicts), and a lean SDK keeps `uv run`
-materialisation fast.
+Validation is hand-rolled and dependency-free on purpose, and a lean SDK keeps
+`uv run` materialisation fast.
 """
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from .contract import (
+    ClaudeCode,
+    ClaudeCodeTool,
+    Codex,
+    CodexTool,
     Context,
+    Json,
     ShellTool,
+    TerminalObservation,
+    Tool,
     ToolAfterContext,
     ToolAfterOutcome,
     ToolAfterVerdict,
     ToolBeforeContext,
     ToolBeforeOutcome,
     ToolBeforeVerdict,
+    ToolError,
     ToolResult,
     Verdict,
 )
@@ -61,13 +68,25 @@ def _require_str(mapping: dict[str, Any], key: str, what: str) -> str:
     return value
 
 
-def _require_int(mapping: dict[str, Any], key: str, what: str) -> int:
+def _require_json(value: object, what: str) -> Json:
+    if value is None or isinstance(value, (bool, int, float, str)):
+        return value
+    if isinstance(value, list):
+        return [_require_json(item, f"{what} item") for item in cast(list[object], value)]
+    if isinstance(value, dict):
+        result: dict[str, Json] = {}
+        for key, item in cast(dict[object, object], value).items():
+            if not isinstance(key, str):
+                raise BoundaryError(f"{what} keys must be strings")
+            result[key] = _require_json(item, f"{what} field {key!r}")
+        return result
+    raise BoundaryError(f"{what} must be JSON, got {type(value).__name__}")
+
+
+def _require_field(mapping: dict[str, Any], key: str, what: str) -> object:
     if key not in mapping:
         raise BoundaryError(f"{what} is missing required field {key!r}")
-    value = mapping[key]
-    if not isinstance(value, int) or isinstance(value, bool):
-        raise BoundaryError(f"{what} field {key!r} must be an int, got {type(value).__name__}")
-    return value
+    return mapping[key]
 
 
 # ---------------------------------------------------------------------------
@@ -97,24 +116,46 @@ def _decode_tool_after(mapping: dict[str, Any]) -> ToolAfterContext:
     session_id = _require_str(mapping, "session_id", "ToolAfterContext")
     cwd = _require_str(mapping, "cwd", "ToolAfterContext")
     tool = _decode_tool(mapping.get("tool"))
-    result = _decode_result(mapping.get("result"))
-    return ToolAfterContext(session_id=session_id, cwd=cwd, tool=tool, result=result)
+    observation = _decode_observation(mapping.get("observation"))
+    return ToolAfterContext(
+        session_id=session_id, cwd=cwd, tool=tool, observation=observation
+    )
 
 
-def _decode_tool(raw: object) -> ShellTool:
+def _decode_tool(raw: object) -> Tool:
     mapping = _require_mapping(raw, "tool")
-    kind = _require_str(mapping, "kind", "tool")
+    harness_name = _require_str(mapping, "harness", "tool")
+    native = _require_mapping(mapping.get("native"), "tool Native data")
+    data = _require_json(native, "tool Native data")
+    assert isinstance(data, dict)
+    if harness_name == ClaudeCode.name:
+        harness, native_tool = ClaudeCode(), ClaudeCodeTool(data)
+    elif harness_name == Codex.name:
+        harness, native_tool = Codex(), CodexTool(data)
+    else:
+        raise BoundaryError(f"unknown Harness {harness_name!r}")
+    projection = _decode_projection(mapping.get("projection"))
+    return Tool(harness=harness, native=native_tool, projection=projection)
+
+
+def _decode_projection(raw: object) -> ShellTool | None:
+    if raw is None:
+        return None
+    mapping = _require_mapping(raw, "Tool projection")
+    kind = _require_str(mapping, "kind", "Tool projection")
     if kind == "shell":
-        command = _require_str(mapping, "command", "shell tool")
-        return ShellTool(command=command)
-    raise BoundaryError(f"unknown tool kind {kind!r}")
+        return ShellTool(command=_require_str(mapping, "command", "shell projection"))
+    raise BoundaryError(f"unknown Tool projection kind {kind!r}")
 
 
-def _decode_result(raw: object) -> ToolResult:
-    mapping = _require_mapping(raw, "result")
-    text = _require_str(mapping, "text", "result")
-    exit_code = _require_int(mapping, "exit_code", "result")
-    return ToolResult(text=text, exit_code=exit_code)
+def _decode_observation(raw: object) -> TerminalObservation:
+    mapping = _require_mapping(raw, "Terminal observation")
+    kind = _require_str(mapping, "kind", "Terminal observation")
+    if kind == "result":
+        return ToolResult(_require_json(_require_field(mapping, "output", "ToolResult"), "ToolResult output"))
+    if kind == "error":
+        return ToolError(_require_json(_require_field(mapping, "error", "ToolError"), "ToolError error"))
+    raise BoundaryError(f"unknown Terminal observation kind {kind!r}")
 
 
 # ---------------------------------------------------------------------------

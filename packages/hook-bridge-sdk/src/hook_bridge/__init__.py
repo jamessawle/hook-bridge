@@ -8,13 +8,23 @@ design rationale, and CONTEXT.md for the ubiquitous language.
 from __future__ import annotations
 
 from .contract import (
+    ClaudeCode,
+    ClaudeCodeTool,
+    Codex,
+    CodexTool,
     Context,
+    Harness,
+    Json,
+    NativeTool,
     ShellTool,
+    TerminalObservation,
     Tool,
     ToolAfterContext,
     ToolAfterVerdict,
     ToolBeforeContext,
     ToolBeforeVerdict,
+    ToolError,
+    ToolProjection,
     ToolResult,
     Verdict,
     allow,
@@ -25,7 +35,7 @@ from .contract import (
     deny,
     pass_,
 )
-from .factories import result, shell, tool_after, tool_before
+from .factories import claude_code_tool, codex_tool, error, result, shell, tool_after, tool_before
 from .hook import Hook, hook, run
 from .wire import BoundaryError, decode_context, encode_verdict
 
@@ -45,6 +55,10 @@ __all__ = [
     "annotate",
     # Contract types
     "Context",
+    "Json",
+    "Harness",
+    "ClaudeCode",
+    "Codex",
     "ToolBeforeContext",
     "ToolBeforeVerdict",
     "ToolAfterContext",
@@ -52,7 +66,13 @@ __all__ = [
     "Verdict",
     "ShellTool",
     "Tool",
+    "ToolProjection",
+    "NativeTool",
+    "ClaudeCodeTool",
+    "CodexTool",
     "ToolResult",
+    "ToolError",
+    "TerminalObservation",
     # Boundary (wire) validation
     "BoundaryError",
     "decode_context",
@@ -62,4 +82,7 @@ __all__ = [
     "tool_after",
     "shell",
     "result",
+    "error",
+    "claude_code_tool",
+    "codex_tool",
 ]

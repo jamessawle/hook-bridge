@@ -1,14 +1,15 @@
 """The generic Contract: the harness-agnostic types a Hook is written against.
 
-A Hook receives a `Context` and returns a `Verdict`, with **zero** knowledge of
-which Harness invoked it (see ../../../../CONTEXT.md). Both are discriminated
-unions of per-event types (#5): a `Context`'s `event` is the discriminator, and
-code written for a given event can only construct the `Verdict` valid for that
-event, so invalid event/verdict pairs are unrepresentable at authoring time.
+A Hook receives a `Context` and returns a `Verdict` (see ../../../../CONTEXT.md).
+Both are discriminated unions of per-event types (#5): a `Context`'s `event` is
+the discriminator, and code written for a given event can only construct the
+`Verdict` valid for that event, so invalid event/verdict pairs are
+unrepresentable at authoring time.
 
-No harness-specific vocabulary appears here — that is the whole point of the
-Adapter boundary. This module holds only concepts that generalise across
-harnesses; the runner's Adapters absorb everything else.
+Portable projections are the ordinary Harness-agnostic authoring path. Every
+Tool also retains explicitly Harness-specific Native data so unknown Tools and
+schema drift remain observable; inspecting it deliberately trades portability
+for fidelity (ADR-0007).
 """
 
 from __future__ import annotations
@@ -17,24 +18,72 @@ from dataclasses import dataclass
 from typing import ClassVar, Literal
 
 # ---------------------------------------------------------------------------
-# Tool model — generic and normalised, never harness pass-through (#5).
-# Discriminated on a generic `kind`; each Adapter maps its native tool name onto
-# one of these members (v1: claude-code `Bash` / codex `shell` → `shell`).
+# Tool model — a required, lossless Native view paired with an optional portable
+# projection (ADR-0007 and ADR-0008).
 # ---------------------------------------------------------------------------
+
+type Json = None | bool | int | float | str | list[Json] | dict[str, Json]
+
+
+@dataclass(frozen=True)
+class ClaudeCode:
+    """The Claude Code Harness discriminator."""
+
+    name: ClassVar[Literal["claude-code"]] = "claude-code"
+
+
+@dataclass(frozen=True)
+class Codex:
+    """The Codex Harness discriminator."""
+
+    name: ClassVar[Literal["codex"]] = "codex"
+
+
+Harness = ClaudeCode | Codex
+
+
+@dataclass(frozen=True)
+class ClaudeCodeTool:
+    """Claude Code's complete Tool view at the observed hook event."""
+
+    data: dict[str, Json]
+
+
+@dataclass(frozen=True)
+class CodexTool:
+    """Codex's complete Tool view at the observed hook event."""
+
+    data: dict[str, Json]
+
+
+NativeTool = ClaudeCodeTool | CodexTool
 
 
 @dataclass(frozen=True)
 class ShellTool:
-    """A shell command invocation. v1's only tool kind."""
+    """The portable projection of a shell command invocation."""
 
     command: str
     kind: Literal["shell"] = "shell"
 
 
-# A union of one, in spirit: `tool` is discriminated on `.kind`, so new kinds
-# (`file_edit`, `web_fetch`, …) slot in as additional members with no change to
-# the Context type. Kept as an alias so the discriminated shape is explicit.
-Tool = ShellTool
+ToolProjection = ShellTool
+
+
+@dataclass(frozen=True)
+class Tool:
+    """A Tool's trusted Harness identity, Native data, and optional projection."""
+
+    harness: Harness
+    native: NativeTool
+    projection: ToolProjection | None = None
+
+    def __post_init__(self) -> None:
+        mismatched = (
+            isinstance(self.harness, ClaudeCode) and isinstance(self.native, CodexTool)
+        ) or (isinstance(self.harness, Codex) and isinstance(self.native, ClaudeCodeTool))
+        if mismatched:
+            raise ValueError("Tool harness and Native data must describe the same Harness")
 
 
 # ---------------------------------------------------------------------------
@@ -68,11 +117,19 @@ class ToolBeforeContext(Context):
 
 @dataclass(frozen=True)
 class ToolResult:
-    """A tool's completed result, as surfaced by `tool.after`. Generic and
-    normalised, never harness pass-through — same treatment as `Tool`."""
+    """A response delivered through a Harness's normal result path."""
 
-    text: str
-    exit_code: int
+    output: Json
+
+
+@dataclass(frozen=True)
+class ToolError:
+    """An error authoritatively identified by a Harness."""
+
+    error: Json
+
+
+TerminalObservation = ToolResult | ToolError
 
 
 @dataclass(frozen=True)
@@ -81,7 +138,7 @@ class ToolAfterContext(Context):
 
     event: ClassVar[str] = "tool.after"
     tool: Tool
-    result: ToolResult
+    observation: TerminalObservation
 
 
 # ---------------------------------------------------------------------------

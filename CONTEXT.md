@@ -20,7 +20,7 @@ The API a Hook is written against — the generic Context it receives and the Ve
 _Avoid_: Interface, schema, protocol (reserve "protocol" for the harness-native side)
 
 **Native data**:
-The Harness-specific view of a Tool at a particular hook event, paired with a formal Harness discriminator supplied by the Adapter. Each Harness defines its own Native data shape; the Adapter preserves the hook definition faithfully but cannot recover the Harness's hidden or original execution intent. A Hook may inspect Native data when it needs information outside the portable Contract, deliberately accepting that this logic may not work with another Harness.
+Harness-specific source data preserved by the Bridge and paired with a formal Harness discriminator supplied by the Adapter. On a Tool, Native data faithfully preserves the Harness's view of that Tool at the observed hook event, including terminal-event data when present; it cannot recover hidden original execution intent. A Hook may inspect Native data when it needs information outside the portable Contract, deliberately accepting that this logic may not work with another Harness.
 _Avoid_: Raw data, generic data
 
 **Context**:
@@ -35,13 +35,13 @@ An optional, normalized view of a Tool expressed only in Harness-independent con
 _Avoid_: Normalized tool, generic tool
 
 **Terminal observation**:
-The value delivered to a `tool.after` Hook after a Harness reports the end of a tool attempt. A Result carries a value from a normal result path; an Error means the Harness explicitly identified an error or exposed facts from which its documented semantics determine one.
+The discriminated `ToolResult | ToolError` value delivered to a `tool.after` Hook after a Harness reports the end of a tool attempt. The Adapter coalesces each Harness's native normal and failure paths into these two portable cases.
 
-**Result**:
-A Terminal observation returned through the Harness's normal result path. Result does not promise that the tool succeeded when the Harness provides no authoritative success status.
+**ToolResult**:
+A Terminal observation returned through the Harness's normal result path, carrying the Harness-exposed response as a JSON value. ToolResult does not promise that the Tool succeeded when the Harness provides no authoritative success status.
 
-**Error**:
-A Terminal observation authoritatively classified as erroneous by the Harness or deterministically derived from its documented semantics. Adapters never create Errors from assumptions or heuristics.
+**ToolError**:
+A Terminal observation carrying the Harness-exposed error as a JSON value, authoritatively classified as erroneous by the Harness or deterministically derived from its documented semantics. Adapters never create ToolErrors from assumptions or heuristics.
 
 **Verdict**:
 The generic, harness-agnostic response a Hook returns (e.g. allow / deny / modify), which hook-bridge translates into the Harness's native response.

@@ -11,6 +11,7 @@ from hook_bridge import (
     ToolBeforeContext,
     ToolBeforeVerdict,
     allow,
+    codex_tool,
     deny,
     hook,
     run,
@@ -21,15 +22,16 @@ from hook_bridge import (
 
 @hook
 def guard(ctx: ToolBeforeContext) -> ToolBeforeVerdict:
-    return deny("no force-push") if "--force" in ctx.tool.command else allow()
+    projection = ctx.tool.projection
+    return deny("no force-push") if projection and "--force" in projection.command else allow()
 
 
 # --- the pure test seam --------------------------------------------------
 
 
 def test_dispatch_runs_the_pure_handler() -> None:
-    assert guard.dispatch(tool_before(shell("git status"))).is_allow
-    assert guard.dispatch(tool_before(shell("git push --force"))).is_deny
+    assert guard.dispatch(tool_before(codex_tool({}, shell("git status")))).is_allow
+    assert guard.dispatch(tool_before(codex_tool({}, shell("git push --force")))).is_deny
 
 
 def test_event_is_read_from_the_annotated_context_type() -> None:
@@ -62,7 +64,11 @@ def _context(command: str) -> dict[str, Any]:
         "event": "tool.before",
         "session_id": "s",
         "cwd": "/repo",
-        "tool": {"kind": "shell", "command": command},
+        "tool": {
+            "harness": "codex",
+            "native": {"tool_name": "shell", "tool_input": {"command": command}},
+            "projection": {"kind": "shell", "command": command},
+        },
     }
 
 
