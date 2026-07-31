@@ -1,0 +1,31 @@
+packages/hook-bridge/src/hook_bridge_runner/adapters/codex/adapter.py
+  s_571f4d8e956daf::t_cba77fd8716fc5 8,22
+packages/hook-bridge/src/hook_bridge_runner/adapters/codex/common.py
+  s_571f4d8e956daf::t_7131df8eefff3f 1-80
+packages/hook-bridge/src/hook_bridge_runner/adapters/codex/tool_after.py
+  s_571f4d8e956daf::t_367a4aede500b0 1-58
+packages/hook-bridge/src/hook_bridge_runner/adapters/codex/tool_before.py
+  s_571f4d8e956daf::t_84f9de8f9d4519 8,16-22
+packages/hook-bridge/tests/adapters/codex/test_adapter.py
+  s_571f4d8e956daf::t_243d30da37ddcb 7,17-20,28-30
+packages/hook-bridge/tests/adapters/codex/test_tool_after.py
+  s_571f4d8e956daf::t_be12b9e812ffda 1-179
+packages/hook-bridge/tests/adapters/codex/test_tool_before.py
+  s_571f4d8e956daf::t_074ea70e08307d 25-32,38,43-46,50-74,85-88,90,93-95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "68e51c15ba3c96284f7340f265a7d45551fc194a",
+  "prompts": {},
+  "sessions": {
+    "s_571f4d8e956daf": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fb858-4edc-7e60-a92a-4c5688eea58a",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
