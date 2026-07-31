@@ -1,0 +1,33 @@
+packages/hook-bridge/src/hook_bridge_runner/adapters/claude_code/adapter.py
+  s_1f53a41e03af46::t_b5d266600f82c9 9,23
+packages/hook-bridge/src/hook_bridge_runner/adapters/claude_code/common.py
+  s_1f53a41e03af46::t_0b97d7f584bce5 5,9,38-40,42,44-57,60-61,68-93
+packages/hook-bridge/src/hook_bridge_runner/adapters/claude_code/tool_after.py
+  s_1f53a41e03af46::t_1bf7c08d86efc3 8,22-29
+packages/hook-bridge/src/hook_bridge_runner/adapters/claude_code/tool_after_failure.py
+  s_1f53a41e03af46::t_3960079ac31e76 1-45
+packages/hook-bridge/tests/adapters/claude_code/test_adapter.py
+  s_1f53a41e03af46::t_df4f8857053d25 10-12,28-31
+packages/hook-bridge/tests/adapters/claude_code/test_tool_after.py
+  s_1f53a41e03af46::t_aba329b781442d 1,13,18-20,29,34-42,46-66,77-81,83-85
+packages/hook-bridge/tests/adapters/claude_code/test_tool_after_failure.py
+  s_1f53a41e03af46::t_c3289080031383 1-100
+packages/hook-bridge/tests/adapters/claude_code/test_tool_before.py
+  s_1f53a41e03af46::t_633b4ab8b45bb5 13,17-18,22-29,35,40-43,47-70,81-84,86,89-91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "d67092adb0ab85339fda753fa98ce11e0e418c5f",
+  "prompts": {},
+  "sessions": {
+    "s_1f53a41e03af46": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fb81e-5e36-75d0-9ef9-600a5b108d68",
+        "model": "unknown"
+      },
+      "human_author": "James Sawle <jamessawle@hotmail.com>"
+    }
+  }
+}
