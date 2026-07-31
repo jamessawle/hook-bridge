@@ -7,6 +7,19 @@ Write a Hook once against the generic **Contract** — the harness-agnostic
 no harness present. `hook-bridge` (the runner, a separate package) adapts each
 harness's native protocol to and from this Contract.
 
+Each Contract `Tool` always carries lossless, Harness-discriminated Native data
+and may also carry a Harness-independent typed projection. A projection type's
+meaning and required shape follow the SDK compatibility policy; changing either
+is a breaking Contract change. Its availability does not: projections are
+best-effort runtime capabilities, so Hook code must handle `projection is None`
+even for a tool that has projected successfully before.
+
+Adapters tolerate unknown extra Native fields, but suppress a projection when
+any required field is missing, changed, or ambiguous rather than guessing or
+rejecting the Tool. Inspect `tool.native` when a projection is unavailable or
+when a Hook deliberately needs Harness-specific information; Native data is
+always preserved as the lossless fallback.
+
 ```python
 # /// script
 # dependencies = ["hook-bridge-sdk"]

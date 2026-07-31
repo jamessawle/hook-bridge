@@ -23,6 +23,21 @@ it returns); and an **Adapter** is the harness-specific piece inside
 hook-bridge that translates one Harness's native protocol to and from the
 Contract.
 
+Every Contract **Tool** pairs required **Native data** with an optional,
+harness-independent typed **projection**. Projection types and their required
+fields follow the SDK's compatibility policy: their meaning and shape are
+stable, and changing either is a breaking Contract change. Projection
+availability is different—it is a dynamic runtime capability, not a guarantee
+for a Harness, tool, or event. Hooks must therefore handle an absent projection
+even when the same kind of tool was projected previously.
+
+An Adapter emits a projection only when it can derive every required field
+faithfully. Unknown extra Native fields are tolerated; missing, changed, or
+ambiguous required fields suppress the projection instead of making decoding
+fail or causing the Adapter to guess. Required Native data is always preserved
+as the lossless fallback for unknown tools, schema drift, and
+Harness-specific logic.
+
 ## Two packages
 
 | Package | What it is | Published as |
