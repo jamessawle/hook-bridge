@@ -1,15 +1,15 @@
-"""claude-code `PostToolUse` <-> Contract `tool.after` Codec."""
+"""claude-code `PostToolUseFailure` <-> Contract `tool.after` Codec."""
 
 from __future__ import annotations
 
 from typing import Any
 
 from ...codec import Codec, RunnerError
-from .common import decode_base, decode_tool, require_json
+from .common import decode_base, decode_tool
 
 
-class _ClaudeCodeToolAfterCodec:
-    native_event = "PostToolUse"
+class _ClaudeCodeToolAfterFailureCodec:
+    native_event = "PostToolUseFailure"
     contract_event = "tool.after"
 
     def decode(self, raw: dict[str, Any]) -> dict[str, Any]:
@@ -19,14 +19,12 @@ class _ClaudeCodeToolAfterCodec:
             contract_event=self.contract_event,
         )
         context["tool"] = decode_tool(raw)
-        if "tool_response" not in raw:
-            raise RunnerError("claude-code PostToolUse payload missing 'tool_response'")
-        context["observation"] = {
-            "kind": "result",
-            "output": require_json(
-                raw["tool_response"], "claude-code tool_response"
-            ),
-        }
+        error = raw.get("error")
+        if not isinstance(error, str):
+            raise RunnerError(
+                "claude-code PostToolUseFailure payload missing 'error'"
+            )
+        context["observation"] = {"kind": "error", "error": error}
         return context
 
     def encode(self, verdict: dict[str, Any]) -> tuple[dict[str, Any], int]:
@@ -43,4 +41,5 @@ class _ClaudeCodeToolAfterCodec:
             return {"hookSpecificOutput": hook_specific_output}, 0
         raise RunnerError(f"claude-code codec cannot encode outcome {outcome!r}")
 
-codec: Codec = _ClaudeCodeToolAfterCodec()
+
+codec: Codec = _ClaudeCodeToolAfterFailureCodec()

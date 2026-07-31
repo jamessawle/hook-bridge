@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, cast
 
 from ...codec import RunnerError
 
-_NORMALISE: dict[str, str] = {"Bash": "shell"}
+type Json = None | bool | int | float | str | list[Json] | dict[str, Json]
 
 
 def decode_base(
@@ -35,21 +35,59 @@ def decode_base(
 
 def decode_tool(raw: dict[str, Any]) -> dict[str, Any]:
     tool_name = raw.get("tool_name")
-    kind = _NORMALISE.get(tool_name) if isinstance(tool_name, str) else None
-    if kind is None:
-        raise RunnerError(
-            f"claude-code tool {tool_name!r} has no generic kind (Unsupported)"
-        )
+    tool_use_id = raw.get("tool_use_id")
+    if not isinstance(tool_name, str) or not isinstance(tool_use_id, str):
+        raise RunnerError("claude-code tool payload missing 'tool_name'/'tool_use_id'")
     tool_input = require_mapping(
-        raw.get("tool_input"), "claude-code Bash tool_input"
+        raw.get("tool_input"), "claude-code tool_input"
     )
+    native = require_json_mapping(raw, "claude-code Native Tool data")
+    return {
+        "harness": "claude-code",
+        "native": native,
+        "projection": decode_projection(tool_name, tool_input),
+    }
+
+
+def decode_projection(
+    tool_name: str, tool_input: dict[str, Any]
+) -> dict[str, Any] | None:
+    """Return only projections whose required fields are faithfully present."""
+    if tool_name != "Bash":
+        return None
     command = tool_input.get("command")
     if not isinstance(command, str):
-        raise RunnerError("claude-code Bash tool_input missing 'command'")
-    return {"kind": kind, "command": command}
+        return None
+    return {"kind": "shell", "command": command}
 
 
 def require_mapping(raw: object, what: str) -> dict[str, Any]:
     if not isinstance(raw, dict):
         raise RunnerError(f"{what} missing or malformed")
     return raw  # pyright: ignore[reportUnknownVariableType]
+
+
+def require_json(raw: object, what: str) -> Json:
+    """Validate and copy a JSON value before it crosses the generic wire."""
+    if raw is None or isinstance(raw, (bool, int, float, str)):
+        return raw
+    if isinstance(raw, list):
+        return [
+            require_json(item, f"{what} item")
+            for item in cast(list[object], raw)
+        ]
+    if isinstance(raw, dict):
+        result: dict[str, Json] = {}
+        for key, item in cast(dict[object, object], raw).items():
+            if not isinstance(key, str):
+                raise RunnerError(f"{what} keys must be strings")
+            result[key] = require_json(item, f"{what} field {key!r}")
+        return result
+    raise RunnerError(f"{what} must be JSON")
+
+
+def require_json_mapping(raw: object, what: str) -> dict[str, Json]:
+    value = require_json(raw, what)
+    if not isinstance(value, dict):
+        raise RunnerError(f"{what} must be a JSON object")
+    return cast(dict[str, Json], value)
